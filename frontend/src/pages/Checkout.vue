@@ -12,6 +12,9 @@
           <input v-model="billing.fullName" type="text" placeholder="Full Name *" class="checkout-input" />
           <input v-model="billing.email" type="email" placeholder="Email *" class="checkout-input" />
           <input v-model="billing.phone" type="text" placeholder="Phone Number" class="checkout-input" />
+          <input v-model="billing.address" type="text" placeholder="Address *" class="checkout-input" />
+          <input v-model="billing.city" type="text" placeholder="City" class="checkout-input" />
+          <input v-model="billing.postalCode" type="text" placeholder="Postal Code" class="checkout-input" />
         </div>
       </div>
 
@@ -169,7 +172,7 @@ const placeOrder = async () => {
     // Save in global orders (for Admin)
     await addDoc(collection(db, "orders"), orderData);
 
-    // clear cart
+    // Clear cart
     for (const item of cart.value) {
       await deleteDoc(doc(db, "users", userId.value, "cart", item.id));
     }
@@ -183,7 +186,6 @@ const placeOrder = async () => {
     loadingOrder.value = false;
   }
 };
-
 </script>
 
 <style scoped>

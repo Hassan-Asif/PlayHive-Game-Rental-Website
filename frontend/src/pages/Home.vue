@@ -11,11 +11,11 @@
           From GTA to FIFA, experience gaming without buying.
         </p>
         <router-link 
-        to="/games" 
-        class="bg-indigo-500 hover:bg-indigo-600 transition-transform transform hover:scale-105 px-8 py-3 rounded-lg text-lg font-semibold animate-bounce"
-      >
-        Browse More Games
-      </router-link>
+          to="/games" 
+          class="bg-indigo-500 hover:bg-indigo-600 transition-transform transform hover:scale-105 px-8 py-3 rounded-lg text-lg font-semibold animate-bounce"
+        >
+          Browse More Games
+        </router-link>
       </div>
     </section>
 
@@ -32,11 +32,12 @@
           <div class="p-4">
             <h3 class="text-lg font-semibold">{{ game.title }}</h3>
             <p class="text-gray-400 mt-1">{{ game.genre || 'Action' }}</p>
-            <router-link :to="`/rent/${game.id}`">
-              <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
-                Rent Now
-              </button>
-            </router-link>
+            <button 
+              @click="goToRent(game.id)"
+              class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full"
+            >
+              Rent Now
+            </button>
           </div>
         </div>
       </div>
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import { db } from "../firebase"; 
+import { db, auth } from "../firebase"; 
 import { collection, getDocs } from "firebase/firestore";
 
 export default {
@@ -76,21 +77,28 @@ export default {
     };
   },
   computed: {
-    // Only show the first 4 games for Featured section
     featuredGames() {
       return this.games.slice(0, 4);
     },
   },
   async mounted() {
-    // Fetch games from Firebase Firestore
     const querySnapshot = await getDocs(collection(db, "games"));
     this.games = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  },
+  methods: {
+    goToRent(gameId) {
+      const user = auth.currentUser;
+      if (!user) {
+        this.$router.push("/login");
+      } else {
+        this.$router.push(`/rent/${gameId}`);
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-/* Simple Tailwind Animations */
 @keyframes fadeInDown {
   0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0); }

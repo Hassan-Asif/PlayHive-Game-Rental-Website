@@ -33,12 +33,12 @@
             <p class="text-gray-400 text-sm mt-2 line-clamp-2">{{ game.description }}</p>
             <div class="mt-4 flex items-center justify-between">
               <span class="text-lg font-semibold text-indigo-400">Rs {{ game.price }}</span>
-              <router-link
-                :to="`/rent/${game.id}`"
+              <button
+                @click="goToRent(game.id)"
                 class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
               >
                 Rent Now
-              </router-link>
+              </button>
             </div>
           </div>
         </div>
@@ -54,6 +54,7 @@
 
 <script>
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { auth } from "../firebase";
 
 export default {
   name: "Games",
@@ -74,6 +75,16 @@ export default {
     } catch (error) {
       console.error("Error fetching games from Firebase:", error);
     }
+  },
+  methods: {
+    goToRent(gameId) {
+      const user = auth.currentUser;
+      if (!user) {
+        this.$router.push("/login");
+      } else {
+        this.$router.push(`/rent/${gameId}`);
+      }
+    },
   },
 };
 </script>

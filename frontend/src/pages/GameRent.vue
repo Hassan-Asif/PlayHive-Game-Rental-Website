@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100 py-12 px-6">
     <div v-if="game" class="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
+      
       <!-- Game Image -->
       <div class="h-80 bg-gray-200">
         <img :src="game.image" :alt="game.title" class="w-full h-full object-cover" />
@@ -17,6 +18,7 @@
         <div class="bg-gray-50 p-6 rounded-xl shadow-md">
           <h2 class="text-2xl font-bold mb-4">Choose Your Rental Plan</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
             <!-- Hourly Plan -->
             <div 
               @click="selectPlan('hourly')" 
@@ -46,6 +48,7 @@
               <p class="text-gray-600 mt-2">Rent this game for 7 days.</p>
               <p class="text-indigo-600 font-bold mt-4">Rs {{ (game.price * 7).toFixed(2) }} / week</p>
             </div>
+
           </div>
 
           <!-- Selected Plan Summary -->
@@ -88,14 +91,10 @@ export default {
     calculatePrice() {
       if (!this.selectedPlan) return 0;
       switch (this.selectedPlan) {
-        case "hourly":
-          return (this.game.price / 24).toFixed(2);
-        case "daily":
-          return this.game.price.toFixed(2);
-        case "weekly":
-          return (this.game.price * 7).toFixed(2);
-        default:
-          return this.game.price.toFixed(2);
+        case "hourly": return (this.game.price / 24).toFixed(2);
+        case "daily": return this.game.price.toFixed(2);
+        case "weekly": return (this.game.price * 7).toFixed(2);
+        default: return this.game.price.toFixed(2);
       }
     },
   },
@@ -128,20 +127,19 @@ export default {
         const user = auth.currentUser;
 
         if (user) {
-          // Save to Firestore if user is logged in
+          // Logged-in user → Firestore
           const cartRef = collection(db, "users", user.uid, "cart");
           await addDoc(cartRef, cartItem);
         } else {
-          // Save to localStorage for guests
+          // Guest → localStorage
           const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
           guestCart.push(cartItem);
           localStorage.setItem("guestCart", JSON.stringify(guestCart));
         }
 
-        // Redirect to cart
         this.$router.push("/cart");
-      } catch (error) {
-        console.error("Error adding to cart:", error);
+      } catch (err) {
+        console.error("Error adding to cart:", err);
         this.$router.push("/cart");
       }
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Hero Section -->
-    <div class="relative w-full h-96 overflow-hidden">
+    <div v-if="game" class="relative w-full h-96 overflow-hidden">
       <img
         :src="game.image"
         :alt="game.name"
@@ -17,13 +17,16 @@
       </div>
     </div>
 
+    <div v-else class="text-center py-24 text-gray-600 font-semibold">
+      Loading game details...
+    </div>
+
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    <div v-if="game" class="max-w-7xl mx-auto px-6 md:px-12 py-12">
       <div class="flex flex-col md:flex-row gap-12">
         
         <!-- Description & Tabs -->
         <div class="flex-1 bg-white rounded-xl shadow-lg p-6">
-          <!-- Tabs -->
           <div class="flex gap-4 border-b border-gray-200 mb-4">
             <button
               v-for="tab in tabs"
@@ -51,11 +54,13 @@
             </ul>
           </div>
 
-          <!-- Action Buttons -->
           <div class="mt-6 flex gap-4">
-            <button class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg transition-transform transform hover:scale-105">
+            <router-link
+              :to="`/rent/${game.id}`"
+              class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg transition-transform transform hover:scale-105"
+            >
               Rent Now
-            </button>
+            </router-link>
             <button class="bg-gray-300 hover:bg-gray-400 text-gray-900 px-6 py-3 rounded-lg transition-transform transform hover:scale-105">
               Add to Wishlist
             </button>
@@ -74,16 +79,21 @@
               <li><span class="font-semibold">Platform:</span> {{ game.platform.join(', ') }}</li>
             </ul>
           </div>
-          <!-- Related Games -->
+
           <div class="bg-white rounded-xl shadow-lg p-6">
             <h3 class="font-semibold text-lg mb-4">Related Games</h3>
             <div class="grid grid-cols-2 gap-4">
-              <div v-for="related in game.relatedGames" :key="related.id" class="relative overflow-hidden rounded-lg shadow hover:scale-105 transition-transform">
+              <router-link
+                v-for="related in game.relatedGames"
+                :key="related.id"
+                :to="`/games/${related.id}`"
+                class="relative overflow-hidden rounded-lg shadow hover:scale-105 transition-transform"
+              >
                 <img :src="related.image" :alt="related.name" class="w-full h-24 object-cover"/>
                 <div class="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-white font-semibold">
                   {{ related.name }}
                 </div>
-              </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -94,50 +104,42 @@
 </template>
 
 <script>
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 export default {
   name: "GameDetail",
   data() {
     return {
       tabs: ["Description", "Reviews", "System Requirements"],
       currentTab: "Description",
-      game: {
-        id: 1,
-        name: "GTA V",
-        genre: "Action / Adventure",
-        price: 5.99,
-        rating: 4.8,
-        releaseDate: "2013-09-17",
-        developer: "Rockstar North",
-        publisher: "Rockstar Games",
-        platform: ["PC", "PS5", "Xbox"],
-        image: "/images/gta.jpg",
-        description: "GTA V is an action-adventure game set in the fictional city of Los Santos...",
-        reviews: [
-          { id: 1, user: "Player1", comment: "Amazing game!", rating: 5 },
-          { id: 2, user: "Player2", comment: "Great graphics and gameplay", rating: 4.5 },
-        ],
-        systemRequirements: {
-          "OS": "Windows 10",
-          "Processor": "Intel i5",
-          "Memory": "8 GB RAM",
-          "Graphics": "NVIDIA GTX 970",
-          "Storage": "72 GB available space"
-        },
-        relatedGames: [
-          { id: 2, name: "Red Dead Redemption 2", image: "/images/rdr2.jpg" },
-          { id: 3, name: "Cyberpunk 2077", image: "/images/cyberpunk.jpg" },
-        ]
-      }
+      game: null,
     };
-  }
+  },
+  async mounted() {
+    const gameId = this.$route.params.id;
+
+    try {
+      const gameRef = doc(db, "games", gameId);
+      const gameSnap = await getDoc(gameRef);
+
+      if (gameSnap.exists()) {
+        this.game = { id: gameSnap.id, ...gameSnap.data() };
+      } else {
+        console.warn("Game not found in Firestore");
+      }
+    } catch (error) {
+      console.error("Error fetching game details:", error);
+    }
+  },
 };
 </script>
 
 <style scoped>
 /* Fade-in animation */
 @keyframes fadeInDown {
-  0% { opacity: 0; transform: translateY(-20px);}
-  100% { opacity: 1; transform: translateY(0);}
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 .animate-fadeInDown { animation: fadeInDown 0.5s ease forwards; }
 </style>

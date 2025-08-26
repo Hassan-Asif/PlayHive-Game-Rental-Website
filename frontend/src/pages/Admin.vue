@@ -34,8 +34,6 @@
 
       <!-- Manage Games -->
       <div v-if="currentTab==='games'" class="animate-fadeIn">
-        &nbsp; &nbsp;
-        
         <h1 class="text-3xl font-bold mb-6">Manage Games</h1>
 
         <!-- Add Game Form -->
@@ -65,65 +63,56 @@
         </ul>
       </div>
 
-      <<!-- Users -->
-<div v-if="currentTab==='users'" class="animate-fadeIn">
-  &nbsp;
-  <h1 class="text-3xl font-bold mb-6">Users</h1>
-
-  <!-- Show total users -->
-  <div class="mb-4 bg-white p-4 rounded shadow text-lg font-semibold">
-    Total Registered Users: {{ users.length }}
-  </div>
-
-  <!-- User list -->
-  <ul class="space-y-2">
-    <li v-for="user in users" :key="user.email" class="flex justify-between bg-white p-4 rounded shadow">
-      <span>{{ user.email }}</span>
-      <span class="text-gray-500">{{ user.role || 'user' }}</span>
-    </li>
-  </ul>
-</div>
-
+      <!-- Users -->
+      <div v-if="currentTab==='users'" class="animate-fadeIn">
+        <h1 class="text-3xl font-bold mb-6">Users</h1>
+        <div class="mb-4 bg-white p-4 rounded shadow text-lg font-semibold">
+          Total Registered Users: {{ users.length }}
+        </div>
+        <ul class="space-y-2">
+          <li v-for="user in users" :key="user.id || user.email" class="flex justify-between bg-white p-4 rounded shadow">
+            <span>{{ user.email }}</span>
+            <span class="text-gray-500">{{ user.role || 'user' }}</span>
+          </li>
+        </ul>
+      </div>
 
       <!-- Orders -->
-<div v-if="currentTab==='orders'" class="animate-fadeIn">
-  &nbsp;
-  <h1 class="text-3xl font-bold mb-6">Orders</h1>
-  <ul class="space-y-2">
-    <li 
-      v-for="order in orders" 
-      :key="order.id" 
-      class="bg-white p-4 rounded shadow cursor-pointer hover:bg-gray-50"
-      @click="toggleOrder(order.id)"
-    >
-      <div class="flex justify-between items-center">
-        <span class="font-semibold">
-          {{ order.billing?.fullName || 'Unknown User' }} - Rs{{ order.total }}
-        </span>
-        <span class="text-gray-500">{{ order.status }}</span>
-      </div>
+      <div v-if="currentTab==='orders'" class="animate-fadeIn">
+        <h1 class="text-3xl font-bold mb-6">Orders</h1>
+        <ul class="space-y-2">
+          <li 
+            v-for="order in orders" 
+            :key="order.id" 
+            class="bg-white p-4 rounded shadow cursor-pointer hover:bg-gray-50"
+            @click="toggleOrder(order.id)"
+          >
+            <div class="flex justify-between items-center">
+              <span class="font-semibold">
+                {{ order.billing?.fullName || 'Unknown User' }} - Rs{{ order.total }}
+              </span>
+              <span class="text-gray-500">{{ order.status }}</span>
+            </div>
 
-      <div v-if="expandedOrderId === order.id" class="mt-3 border-t pt-3 text-sm text-gray-700">
-        <p><strong>User Email:</strong> {{ order.billing?.email }}</p>
-        <p><strong>Address:</strong> {{ order.billing?.address }}</p>
-        <p><strong>Total:</strong> Rs{{ order.total }}</p>
-        <p><strong>Status:</strong> {{ order.status }}</p>
-        <p><strong>Date:</strong> {{ order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'N/A' }}</p>
-        
-        <!-- Items list -->
-        <div class="mt-2">
-          <strong>Items:</strong>
-          <ul class="list-disc ml-6">
-            <li v-for="item in order.items" :key="item.id">
-              {{ item.title }} x{{ item.quantity }} - Rs{{ (item.price * item.quantity).toFixed(2) }}
-            </li>
-          </ul>
-        </div>
+            <div v-if="expandedOrderId === order.id" class="mt-3 border-t pt-3 text-sm text-gray-700">
+              <p><strong>User Email:</strong> {{ order.billing?.email }}</p>
+              <p><strong>Address:</strong> {{ order.billing?.address }}</p>
+              <p><strong>Total:</strong> Rs{{ order.total }}</p>
+              <p><strong>Status:</strong> {{ order.status }}</p>
+              <p><strong>Date:</strong> {{ order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'N/A' }}</p>
+              
+              <div class="mt-2">
+                <strong>Items:</strong>
+                <ul class="list-disc ml-6">
+                  <li v-for="item in order.items" :key="item.id">
+                    {{ item.title }} x{{ item.quantity }} - Rs{{ (item.price * item.quantity).toFixed(2) }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
-    </li>
-  </ul>
-</div>
-
     </main>
   </div>
 
@@ -148,7 +137,7 @@ export default {
       games: [],
       users: [],
       orders: [],
-      expandedOrderId: null, // track which order is expanded
+      expandedOrderId: null,
     };
   },
   computed: {
@@ -164,8 +153,8 @@ export default {
       ];
     },
     async fetchGames() {
-      const querySnapshot = await getDocs(collection(db, "games"));
-      this.games = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const snapshot = await getDocs(collection(db, "games"));
+      this.games = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     },
     async addGame() {
       const docRef = await addDoc(collection(db, "games"), this.newGame);
@@ -177,12 +166,12 @@ export default {
       this.games = this.games.filter(g => g.id !== id);
     },
     async fetchOrders() {
-      const querySnapshot = await getDocs(collection(db, "orders"));
-      this.orders = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const snapshot = await getDocs(collection(db, "orders"));
+      this.orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     },
     async fetchUsers() {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      this.users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const snapshot = await getDocs(collection(db, "users"));
+      this.users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     },
     toggleOrder(orderId) {
       this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;

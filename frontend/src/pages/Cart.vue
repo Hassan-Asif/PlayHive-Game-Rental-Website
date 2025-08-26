@@ -27,10 +27,7 @@
           :key="item.id"
           class="bg-white p-4 rounded-lg shadow flex items-center gap-4 hover:shadow-2xl transition-all animate-fadeIn"
         >
-          <!-- Game Image -->
           <img :src="item.image" :alt="item.title" class="w-24 h-24 object-cover rounded-lg" />
-
-          <!-- Game Info -->
           <div class="flex-1">
             <h2 class="font-semibold text-lg">{{ item.title }}</h2>
             <p class="text-gray-500">{{ item.description }}</p>
@@ -42,21 +39,16 @@
                 @click="decreaseQty(item)"
                 class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition"
                 :disabled="item.quantity <= 1 || !userId"
-              >
-                -
-              </button>
+              >-</button>
               <span class="px-2">{{ item.quantity }}</span>
               <button
                 @click="increaseQty(item)"
                 class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition"
                 :disabled="!userId"
-              >
-                +
-              </button>
+              >+</button>
             </div>
           </div>
 
-          <!-- Price & Remove -->
           <div class="text-right">
             <p class="font-semibold">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
             <button
@@ -168,18 +160,15 @@ export default {
     },
     async removeItem(itemId) {
       if (this.userId) {
-        // Logged-in user: remove from Firestore
         const itemRef = doc(db, "users", this.userId, "cart", itemId);
         await deleteDoc(itemRef);
       } else {
-        // Guest: remove from localStorage
         this.cartItems = this.cartItems.filter(item => item.id !== itemId);
         localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
       }
     },
     goToCheckout() {
       if (!this.userId) {
-        // Guests cannot checkout
         this.$router.push("/login");
         return;
       }
