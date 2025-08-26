@@ -3,30 +3,33 @@
     <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       
       <!-- Logo -->
-      <div class="text-2xl font-bold cursor-pointer hover:text-indigo-500 transition-colors">
-        PlayHive
-      </div>
+      <p class="text-2xl font-bold cursor-pointer hover:text-indigo-500 transition-colors">
+        SankGaming
+      </p>
       
       <!-- Menu Links (Desktop) -->
       <ul class="hidden md:flex items-center gap-8">
-        <li>
-          <a href="/" class="hover:text-indigo-500 transition-colors">Home</a>
-        </li>
-        <li>
-          <a href="/" class="hover:text-indigo-500 transition-colors">Games</a>
-        </li>
-        <li>
-          <a href="/" class="hover:text-indigo-500 transition-colors">How It Works</a>
-        </li>
-        <li>
-          <a href="/about" class="hover:text-indigo-500 transition-colors">About</a>
+        <li><router-link to="/" class="hover:text-indigo-500 transition-colors">Home</router-link></li>
+        <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
+        <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
+        <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
+
+        <!-- Cart only if logged in -->
+        <li v-if="user">
+          <router-link to="/cart" class="hover:text-indigo-500 text-xl">
+            🛒
+          </router-link>
         </li>
       </ul>
       
-      <!-- Call to Action -->
-      <div class="hidden md:block">
-        <button class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-lg transition-transform transform hover:scale-105">
-          Sign In
+      <!-- Auth Buttons (only if logged in) -->
+      <div class="hidden md:flex items-center gap-4">
+        <button 
+          v-if="user" 
+          @click="logout" 
+          class="hover:text-red-500 text-xl"
+        >
+          🚪
         </button>
       </div>
 
@@ -50,13 +53,25 @@
     <!-- Mobile Menu -->
     <transition name="slide-fade">
       <ul v-if="menuOpen" class="md:hidden bg-gray-800 px-6 py-4 flex flex-col gap-4">
-        <li><a href="#" class="hover:text-indigo-500 transition-colors">Home</a></li>
-        <li><a href="#featured" class="hover:text-indigo-500 transition-colors">Games</a></li>
-        <li><a href="#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</a></li>
-        <li><a href="#contact" class="hover:text-indigo-500 transition-colors">Contact</a></li>
-        <li>
-          <button class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-lg w-full transition-transform transform hover:scale-105">
-            Sign In
+        <li><router-link to="/" class="hover:text-indigo-500 transition-colors">Home</router-link></li>
+        <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
+        <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
+        <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
+        
+        <!-- Cart only if logged in -->
+        <li v-if="user">
+          <router-link to="/cart" class="hover:text-indigo-500 text-xl">
+            🛒
+          </router-link>
+        </li>
+
+        <!-- Logout only if logged in -->
+        <li v-if="user">
+          <button 
+            @click="logout" 
+            class="hover:text-red-500 text-xl"
+          >
+            🚪
           </button>
         </li>
       </ul>
@@ -65,16 +80,32 @@
 </template>
 
 <script>
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
 export default {
   name: "Navbar",
   data() {
     return {
       menuOpen: false,
+      user: null,
     };
+  },
+  created() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
   },
   methods: {
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
+    },
+    logout() {
+      const auth = getAuth();
+      signOut(auth).then(() => {
+        this.user = null;
+        this.$router.push("/");
+      });
     },
   },
 };

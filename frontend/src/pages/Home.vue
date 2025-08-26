@@ -10,11 +10,12 @@
         <p class="text-lg md:text-xl text-gray-300 mb-8 animate-fadeIn">
           From GTA to FIFA, experience gaming without buying.
         </p>
-        <button
-          class="bg-indigo-500 hover:bg-indigo-600 transition-transform transform hover:scale-105 px-8 py-3 rounded-lg text-lg font-semibold animate-bounce"
-        >
-          Browse Games
-        </button>
+        <router-link 
+        to="/games" 
+        class="bg-indigo-500 hover:bg-indigo-600 transition-transform transform hover:scale-105 px-8 py-3 rounded-lg text-lg font-semibold animate-bounce"
+      >
+        Browse More Games
+      </router-link>
       </div>
     </section>
 
@@ -27,13 +28,15 @@
           :key="game.id"
           class="min-w-[250px] snap-start bg-gray-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-500"
         >
-          <img :src="game.image" :alt="game.name" class="w-full h-40 object-cover"/>
+          <img :src="game.image" :alt="game.title" class="w-full h-40 object-cover"/>
           <div class="p-4">
-            <h3 class="text-lg font-semibold">{{ game.name }}</h3>
-            <p class="text-gray-400 mt-1">{{ game.genre }}</p>
-            <button class="mt-3 w-full bg-indigo-500 hover:bg-indigo-600 rounded-lg py-2 transition-all">
-              Rent Now
-            </button>
+            <h3 class="text-lg font-semibold">{{ game.title }}</h3>
+            <p class="text-gray-400 mt-1">{{ game.genre || 'Action' }}</p>
+            <router-link :to="`/rent/${game.id}`">
+              <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
+                Rent Now
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -62,17 +65,26 @@
 </template>
 
 <script>
+import { db } from "../firebase"; 
+import { collection, getDocs } from "firebase/firestore";
+
 export default {
   name: "Home",
   data() {
     return {
-      featuredGames: [
-        { id: 1, name: "GTA V", genre: "Action / Adventure", image: "/images/gta.jpg" },
-        { id: 2, name: "FIFA 23", genre: "Sports", image: "/images/fifa.jpg" },
-        { id: 3, name: "Resident Evil", genre: "Horror / Action", image: "/images/residentevil.jpg" },
-        { id: 4, name: "Cyberpunk 2077", genre: "RPG / Action", image: "/images/cyberpunk.jpg" },
-      ],
+      games: [],
     };
+  },
+  computed: {
+    // Only show the first 4 games for Featured section
+    featuredGames() {
+      return this.games.slice(0, 4);
+    },
+  },
+  async mounted() {
+    // Fetch games from Firebase Firestore
+    const querySnapshot = await getDocs(collection(db, "games"));
+    this.games = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   },
 };
 </script>

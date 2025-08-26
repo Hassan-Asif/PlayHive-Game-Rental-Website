@@ -38,28 +38,7 @@
       </div>
     </section>
 
-    <!-- Team Section -->
-    <section class="max-w-6xl mx-auto px-6 py-20 bg-gray-50">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Meet the Team</h2>
-        <p class="text-gray-700 text-lg">Passionate gamers and developers behind PlayHive.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
-        <div v-for="member in team" :key="member.name" class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105">
-          <img :src="member.image" :alt="member.name" class="w-full h-56 object-cover"/>
-          <div class="p-4 text-center">
-            <h3 class="font-semibold text-lg">{{ member.name }}</h3>
-            <p class="text-gray-500 text-sm">{{ member.role }}</p>
-            <div class="flex justify-center gap-3 mt-2">
-              <a :href="member.linkedin" target="_blank" class="text-gray-500 hover:text-indigo-500 transition"><i class="fab fa-linkedin"></i></a>
-              <a :href="member.twitter" target="_blank" class="text-gray-500 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    
   </div>
 </template>
 

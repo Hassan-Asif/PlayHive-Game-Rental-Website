@@ -1,32 +1,53 @@
 <template>
-  <div
-    class="relative bg-gray-800 rounded-xl overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+  <div 
+    class="relative bg-gray-900 rounded-2xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition duration-300 group border border-gray-800"
   >
-    <!-- Game Image -->
-    <img :src="game.image" :alt="game.name" class="w-full h-56 object-cover" />
+    <!-- Game Cover -->
+    <div class="relative">
+      <img 
+        :src="game.image" 
+        :alt="game.title" 
+        class="w-full h-56 object-cover group-hover:opacity-90 transition"
+      />
+      <!-- Price Tag -->
+      <div class="absolute top-3 right-3 bg-indigo-600 text-white px-3 py-1 text-sm font-semibold rounded-lg shadow">
+        ${{ game.price }}
+      </div>
+    </div>
 
-    <!-- Overlay on hover -->
-    <div
-      class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4"
-    >
-      <h3 class="text-lg font-bold text-white">{{ game.name }}</h3>
-      <p class="text-gray-300 text-sm">{{ game.genre }}</p>
-      <div class="flex items-center justify-between mt-2">
-        <!-- Price -->
-        <span class="text-indigo-400 font-semibold">${{ game.price.toFixed(2) }}</span>
+    <!-- Game Info -->
+    <div class="p-4 flex flex-col gap-3">
+      <!-- Title -->
+      <h3 class="text-lg font-bold text-white truncate">{{ game.title }}</h3>
+      <!-- Description -->
+      <p class="text-gray-400 text-sm line-clamp-2">
+        {{ game.description }}
+      </p>
 
-        <!-- Rent Button -->
-        <button
-          class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1 rounded-lg font-medium transition-transform transform hover:scale-105"
-          @click="$emit('rent', game.id)"
-        >
-          Rent
-        </button>
+      <!-- Rating (static for now, can be dynamic later) -->
+      <div class="flex items-center text-yellow-400 text-sm">
+        <svg v-for="i in 5" :key="i" xmlns="http://www.w3.org/2000/svg" 
+             class="h-4 w-4 fill-current" 
+             :class="{ 'text-gray-600': i > game.rating }" 
+             viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.18 3.64a1 1 0 00.95.69h3.826c.969 0 1.371 1.24.588 1.81l-3.1 2.25a1 1 0 00-.364 1.118l1.18 3.64c.3.921-.755 1.688-1.54 1.118l-3.1-2.25a1 1 0 00-1.176 0l-3.1 2.25c-.784.57-1.838-.197-1.539-1.118l1.18-3.64a1 1 0 00-.364-1.118l-3.1-2.25c-.783-.57-.38-1.81.588-1.81h3.827a1 1 0 00.95-.69l1.18-3.64z"/>
+        </svg>
       </div>
 
-      <!-- Optional Badge or Rating -->
-      <div class="absolute top-2 left-2 bg-indigo-500 text-white text-xs font-semibold px-2 py-1 rounded">
-        {{ game.rating }}⭐
+      <!-- Buttons -->
+      <div class="flex justify-between items-center mt-2">
+        <button 
+          @click="$emit('add-to-cart', game)" 
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl shadow transition"
+        >
+          Add to Cart
+        </button>
+        <button 
+          @click="$emit('view-details', game)" 
+          class="border border-gray-600 hover:border-indigo-600 hover:text-indigo-400 px-4 py-2 rounded-xl text-sm text-gray-300 transition"
+        >
+          View Details
+        </button>
       </div>
     </div>
   </div>
@@ -38,20 +59,18 @@ export default {
   props: {
     game: {
       type: Object,
-      required: true,
-      default: () => ({
-        id: 1,
-        name: "GTA V",
-        genre: "Action / Adventure",
-        price: 5.99,
-        image: "/images/gta.jpg",
-        rating: 4.8,
-      }),
-    },
-  },
+      required: true
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Optional hover animation if you want additional effects */
+/* Line clamp for description */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 </style>

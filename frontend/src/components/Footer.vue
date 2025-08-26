@@ -1,12 +1,13 @@
 <template>
   <footer class="bg-gray-800 text-gray-300 py-10">
+    <div class="border-t border-gray-700 mt-10 pt-4 text-center text-gray-500 text-xs">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
       
       <!-- Company Info -->
       <div>
-        <h2 class="text-xl font-bold text-white mb-2">AqilLabs</h2>
+        <h2 class="text-xl font-bold text-white mb-2">SankGaming</h2>
         <p class="text-gray-400">
-          Custom Software Solutions Built for Your Business
+          Best ready to play gaming website
         </p>
         <div class="flex gap-3 mt-3">
           <a href="#" class="hover:text-white">
@@ -16,7 +17,7 @@
               <circle cx="12" cy="12" r="3.6"/>
             </svg>
           </a>
-          <a href="https://www.linkedin.com/company/aqillabs-ra/posts/?feedView=all" class="hover:text-white">
+          <a href="#" class="hover:text-white">
             <!-- LinkedIn SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 8h5v16H0V8zm7.5 0h4.7v2.2h.1c.65-1.2 2.25-2.45 4.65-2.45 4.95 0 5.85 3.25 5.85 7.45V24h-5v-7.5c0-1.8-.03-4.1-2.5-4.1-2.5 0-2.88 1.95-2.88 3.95V24h-5V8z"/>
@@ -26,42 +27,17 @@
       </div>
 
       <!-- Services -->
-      <div>
-        <h3 class="text-lg font-semibold text-white mb-2">Services</h3>
-        <ul class="space-y-1">
-          <li><span>Web Development</span></li>
-          <li><span>Mobile Apps</span></li>
-          <li><span>UI/UX Design</span></li>
-          <li><span>Digital Marketing</span></li>
-        </ul>
-      </div>
+      
 
       <!-- Company -->
-      <div>
-        <h3 class="text-lg font-semibold text-white mb-2">Company</h3>
-        <ul class="space-y-1">
-          <li><span>About</span></li>
-          <li><span>Team</span></li>
-          <li><span>Careers</span></li>
-          <li><span>Contact</span></li>
-        </ul>
+      
+
+      
       </div>
-
-      <!-- Legal -->
-      <div>
-        <h3 class="text-lg font-semibold text-white mb-2">Legal</h3>
-        <ul class="space-y-1">
-          <li><span>Privacy Policy</span></li>
-          <li><span>Terms of Service</span></li>
-          <li><span>Cookie Policy</span></li>
-        </ul>
-      </div>
-
-    </div>
-
     <!-- Footer Bottom -->
     <div class="border-t border-gray-700 mt-10 pt-4 text-center text-gray-500 text-xs">
       © {{ new Date().getFullYear() }} AqilLabs. All rights reserved.
+    </div>
     </div>
   </footer>
 </template>

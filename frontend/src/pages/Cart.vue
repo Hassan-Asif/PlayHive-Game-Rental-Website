@@ -1,81 +1,148 @@
 <template>
   <div class="min-h-screen bg-gray-100 py-12 px-6 md:px-12">
-    &nbsp;
-    &nbsp;
     <h1 class="text-4xl font-bold mb-8 text-gray-900 animate-fadeInDown">Your Cart</h1>
 
-    <!-- Empty Cart State -->
-    <div v-if="cartItems.length === 0" class="text-center py-32">
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-32 text-gray-500">
+      Loading your cart...
+    </div>
+
+    <!-- Empty Cart -->
+    <div v-else-if="cartItems.length === 0" class="text-center py-32">
       <p class="text-gray-500 text-xl mb-4">Your cart is empty.</p>
-      <button class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg transition transform hover:scale-105">
+      <router-link
+        to="/games"
+        class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg transition transform hover:scale-105"
+      >
         Browse Games
-      </button>
+      </router-link>
     </div>
 
     <!-- Cart Items -->
     <div v-else class="grid md:grid-cols-3 gap-8">
-      
       <!-- Items List -->
       <div class="md:col-span-2 space-y-4">
-        <div v-for="item in cartItems" :key="item.id" class="bg-white p-4 rounded-lg shadow flex items-center gap-4 hover:shadow-2xl transition-all animate-fadeIn">
-          
+        <div
+          v-for="item in cartItems"
+          :key="item.id"
+          class="bg-white p-4 rounded-lg shadow flex items-center gap-4 hover:shadow-2xl transition-all animate-fadeIn"
+        >
           <!-- Game Image -->
-          <img :src="item.image" :alt="item.name" class="w-24 h-24 object-cover rounded-lg" />
+          <img :src="item.image" :alt="item.title" class="w-24 h-24 object-cover rounded-lg" />
 
           <!-- Game Info -->
           <div class="flex-1">
-            <h2 class="font-semibold text-lg">{{ item.name }}</h2>
-            <p class="text-gray-500">{{ item.genre }}</p>
+            <h2 class="font-semibold text-lg">{{ item.title }}</h2>
+            <p class="text-gray-500">{{ item.description }}</p>
+            <p class="text-gray-400 text-sm">
+              Rental Plan: <span class="text-indigo-500">{{ item.rentalPlan }}</span>
+            </p>
             <div class="flex items-center gap-2 mt-2">
-              <button @click="decreaseQty(item)" class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition">-</button>
+              <button
+                @click="decreaseQty(item)"
+                class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition"
+                :disabled="item.quantity <= 1 || !userId"
+              >
+                -
+              </button>
               <span class="px-2">{{ item.quantity }}</span>
-              <button @click="increaseQty(item)" class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition">+</button>
+              <button
+                @click="increaseQty(item)"
+                class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition"
+                :disabled="!userId"
+              >
+                +
+              </button>
             </div>
           </div>
 
           <!-- Price & Remove -->
           <div class="text-right">
-            <p class="font-semibold">${{ (item.price * item.quantity).toFixed(2) }}</p>
-            <button @click="removeItem(item.id)" class="text-red-500 hover:text-red-700 mt-2 transition">Remove</button>
+            <p class="font-semibold">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
+            <button
+              @click="removeItem(item.id)"
+              class="text-red-500 hover:text-red-700 mt-2 transition"
+            >
+              Remove
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Summary -->
+      <!-- Order Summary -->
       <div class="bg-white p-6 rounded-lg shadow animate-fadeIn">
         <h2 class="text-2xl font-bold mb-4">Order Summary</h2>
         <div class="flex justify-between mb-2">
           <span>Subtotal</span>
-          <span>${{ subtotal.toFixed(2) }}</span>
+          <span>Rs {{ subtotal.toFixed(2) }}</span>
         </div>
         <div class="flex justify-between mb-2">
           <span>Tax (10%)</span>
-          <span>${{ tax.toFixed(2) }}</span>
+          <span>Rs {{ tax.toFixed(2) }}</span>
         </div>
         <div class="flex justify-between font-bold text-lg border-t border-gray-300 pt-2 mb-4">
           <span>Total</span>
-          <span>${{ total.toFixed(2) }}</span>
+          <span>Rs {{ total.toFixed(2) }}</span>
         </div>
-        <button class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition transform hover:scale-105">
+        <button
+          @click="goToCheckout"
+          class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition transform hover:scale-105"
+          :disabled="cartItems.length === 0"
+        >
           Proceed to Checkout
         </button>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
+import { db, auth } from "../firebase";
+import { collection, query, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+
 export default {
   name: "Cart",
   data() {
     return {
-      cartItems: [
-        { id: 1, name: "GTA V", genre: "Action / Adventure", price: 5.99, quantity: 1, image: "/images/gta.jpg" },
-        { id: 2, name: "FIFA 23", genre: "Sports", price: 4.99, quantity: 2, image: "/images/fifa.jpg" },
-        { id: 3, name: "Resident Evil", genre: "Horror / Action", price: 6.49, quantity: 1, image: "/images/residentevil.jpg" },
-      ],
+      cartItems: [],
+      userId: null,
+      loading: true,
+      unsubscribe: null,
     };
+  },
+  mounted() {
+    onAuthStateChanged(auth, (user) => {
+      this.userId = user ? user.uid : null;
+
+      if (this.userId) {
+        // Logged-in user cart from Firestore
+        const cartRef = collection(db, "users", this.userId, "cart");
+        const q = query(cartRef);
+        this.unsubscribe = onSnapshot(
+          q,
+          (snapshot) => {
+            this.cartItems = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            this.loading = false;
+          },
+          (error) => {
+            console.error("Error fetching cart:", error);
+            this.loading = false;
+          }
+        );
+      } else {
+        // Guest cart from localStorage
+        const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+        this.cartItems = guestCart;
+        this.loading = false;
+      }
+    });
+  },
+  beforeUnmount() {
+    if (this.unsubscribe) this.unsubscribe();
   },
   computed: {
     subtotal() {
@@ -89,14 +156,34 @@ export default {
     },
   },
   methods: {
-    increaseQty(item) {
-      item.quantity++;
+    async increaseQty(item) {
+      if (!this.userId) return;
+      const itemRef = doc(db, "users", this.userId, "cart", item.id);
+      await updateDoc(itemRef, { quantity: item.quantity + 1 });
     },
-    decreaseQty(item) {
-      if (item.quantity > 1) item.quantity--;
+    async decreaseQty(item) {
+      if (!this.userId || item.quantity <= 1) return;
+      const itemRef = doc(db, "users", this.userId, "cart", item.id);
+      await updateDoc(itemRef, { quantity: item.quantity - 1 });
     },
-    removeItem(id) {
-      this.cartItems = this.cartItems.filter(item => item.id !== id);
+    async removeItem(itemId) {
+      if (this.userId) {
+        // Logged-in user: remove from Firestore
+        const itemRef = doc(db, "users", this.userId, "cart", itemId);
+        await deleteDoc(itemRef);
+      } else {
+        // Guest: remove from localStorage
+        this.cartItems = this.cartItems.filter(item => item.id !== itemId);
+        localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
+      }
+    },
+    goToCheckout() {
+      if (!this.userId) {
+        // Guests cannot checkout
+        this.$router.push("/login");
+        return;
+      }
+      this.$router.push("/checkout");
     },
   },
 };
