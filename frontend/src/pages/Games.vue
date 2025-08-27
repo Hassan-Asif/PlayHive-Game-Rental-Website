@@ -54,7 +54,6 @@
 
 <script>
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-import { auth } from "../firebase";
 
 export default {
   name: "Games",
@@ -78,16 +77,13 @@ export default {
   },
   methods: {
     goToRent(gameId) {
-      const user = auth.currentUser;
-      if (!user) {
-        this.$router.push("/games");
-      } else {
-        this.$router.push(`/rent/${gameId}`);
-      }
+      // ✅ Always go to rent page, no matter if logged in or not
+      this.$router.push(`/rent/${gameId}`);
     },
   },
 };
 </script>
+
 
 <style scoped>
 /* Limit description to 2 lines */

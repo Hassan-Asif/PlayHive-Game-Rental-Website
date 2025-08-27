@@ -19,20 +19,20 @@
       </div>
     </section>
 
-    <!-- Featured Games Carousel -->
+    <!-- Featured Games Section -->
     <section class="py-20">
       <h2 class="text-3xl font-bold text-center mb-12 animate-fadeInUp">Featured Games</h2>
-      <div class="flex gap-6 overflow-x-auto px-6 snap-x snap-mandatory">
+      <div class="grid gap-8 px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div
           v-for="game in featuredGames"
           :key="game.id"
-          class="min-w-[250px] snap-start bg-gray-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-500"
+          class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-500"
         >
           <img :src="game.image" :alt="game.title" class="w-full h-40 object-cover"/>
           <div class="p-4">
             <h3 class="text-lg font-semibold">{{ game.title }}</h3>
             <p class="text-gray-400 mt-1">{{ game.genre || 'Action' }}</p>
-            <!-- Directly go to Rent page without checking auth -->
+            <!-- Direct Rent Button -->
             <router-link :to="`/rent/${game.id}`">
               <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full">
                 Rent Now
@@ -91,7 +91,6 @@ export default {
 </script>
 
 <style scoped>
-/* Simple Tailwind Animations */
 @keyframes fadeInDown {
   0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0); }

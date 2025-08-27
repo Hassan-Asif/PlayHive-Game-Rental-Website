@@ -1,30 +1,31 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-12 px-6">
+  &nbsp;
+  <div class="min-h-screen bg-gray-700 py-12 px-6">
     <div v-if="game" class="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
       
       <!-- Game Section (Image + Details side by side) -->
       <div class="flex flex-col md:flex-row">
         
         <!-- Game Image -->
-        <div class="bg-gray-200 flex justify-center items-center w-full md:w-1/2">
+        <div class="bg-gray-200 flex justify-center items-center w-semi md:w-1/2">
           <img 
             :src="game.image" 
             :alt="game.title" 
-            class="w-full h-[400px] object-cover"
+            class="w-full h-[350px] object-cover"
           />
         </div>
 
         <!-- Game Details -->
-        <div class="p-8 w-full md:w-1/2">
-          <h1 class="text-3xl font-bold mb-2">{{ game.title }}</h1>
-          <p class="text-gray-600 mb-4">{{ game.description }}</p>
+        <div class="p-8 w-full md:w-1/2 bg-gray-900">
+          <h1 class="text-3xl font-bold mb-2 text-white">{{ game.title }}</h1>
+          <p class="text-gray-200 mb-4">{{ game.description }}</p>
           <p class="text-yellow-500 mb-6">⭐ {{ game.rating }}/5</p>
         </div>
       </div>
 
       <!-- Rental Plan Section -->
-      <div class="p-8 bg-gray-50 rounded-b-2xl shadow-inner">
-        <h2 class="text-2xl font-bold mb-4">Choose Your Rental Plan</h2>
+      <div class="p-8 bg-gray-900 rounded-b-2xl shadow-inner">
+        <h2 class="text-2xl font-bold mb-4 text-white">Choose Your Rental Plan</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <!-- Daily Plan -->
@@ -32,8 +33,8 @@
             @click="selectPlan('daily')" 
             :class="planClass('daily')" 
             class="cursor-pointer p-6 rounded-xl border hover:shadow-lg transition">
-            <h3 class="text-xl font-semibold">Daily Plan</h3>
-            <p class="text-gray-600 mt-2">Rent this game for a full day.</p>
+            <h3 class="text-xl font-semibold text-white">Daily Plan</h3>
+            <p class="text-gray-200 mt-2">Rent this game for a full day.</p>
             <p class="text-indigo-600 font-bold mt-4">
               Rs {{ game.dailyPrice }} / day
             </p>
@@ -44,8 +45,8 @@
             @click="selectPlan('weekly')" 
             :class="planClass('weekly')" 
             class="cursor-pointer p-6 rounded-xl border hover:shadow-lg transition">
-            <h3 class="text-xl font-semibold">Weekly Plan</h3>
-            <p class="text-gray-600 mt-2">Rent this game for 7 days.</p>
+            <h3 class="text-xl font-semibold text-white">Weekly Plan</h3>
+            <p class="text-gray-200 mt-2">Rent this game for 7 days.</p>
             <p class="text-indigo-600 font-bold mt-4">
               Rs {{ game.weeklyPrice }} / week
             </p>
@@ -54,10 +55,11 @@
         </div>
 
         <!-- Selected Plan Summary -->
-        <div v-if="selectedPlan" class="mt-8 p-6 bg-indigo-50 rounded-xl">
-          <h3 class="text-lg font-semibold">You selected:</h3>
+        <div v-if="selectedPlan" class="mt-8 p-6 bg-gray-700 rounded-xl">
+          <h3 class="text-lg font-semibold text-white">You selected:</h3>
           <p class="mt-2">
-            <span class="font-bold capitalize">{{ selectedPlan }}</span> Plan → 
+            <span class="font capitalize text-gray-300">{{ selectedPlan }}</span>
+            &nbsp;
             <span class="text-indigo-600 font-bold">Rs {{ calculatePrice }}</span>
           </p>
           <button 
@@ -107,7 +109,7 @@ export default {
     },
     planClass(plan) {
       return this.selectedPlan === plan
-        ? "border-2 border-indigo-500 bg-indigo-50"
+        ? "border-2 border-indigo-500 bg-gray-700"
         : "border";
     },
     async confirmOrder() {
@@ -134,8 +136,8 @@ export default {
           const cartRef = collection(db, "users", user.uid, "cart");
           await addDoc(cartRef, cartItem);
         } else {
-          // Guest → localStorage
-          const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+          // Guest → Save to localStorage
+          let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
           guestCart.push(cartItem);
           localStorage.setItem("guestCart", JSON.stringify(guestCart));
         }
@@ -143,18 +145,23 @@ export default {
         this.$router.push("/cart");
       } catch (err) {
         console.error("Error adding to cart:", err);
-        this.$router.push("/cart");
+        alert("Something went wrong while adding to cart.");
       }
     },
   },
   async mounted() {
-    const gameId = this.$route.params.id;
-    const gameRef = doc(db, "games", gameId);
-    const gameSnap = await getDoc(gameRef);
+    try {
+      const gameId = this.$route.params.id;
+      const gameRef = doc(db, "games", gameId);
+      const gameSnap = await getDoc(gameRef);
 
-    if (gameSnap.exists()) {
-      this.game = { id: gameSnap.id, ...gameSnap.data() };
-    } else {
+      if (gameSnap.exists()) {
+        this.game = { id: gameSnap.id, ...gameSnap.data() };
+      } else {
+        this.game = null;
+      }
+    } catch (err) {
+      console.error("Error fetching game:", err);
       this.game = null;
     }
   },

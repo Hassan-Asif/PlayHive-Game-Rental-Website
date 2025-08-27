@@ -1,26 +1,25 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-10 px-4">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <div class="min-h-screen bg-gray-700 flex items-center justify-center px-4">
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
       
       <!-- Left: Checkout Form -->
-      <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-        <h2 class="text-3xl font-bold mb-6 text-gray-800">Checkout</h2>
+      <div class="lg:col-span-2 bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-800">
+        <h2 class="text-3xl font-bold mb-6 text-white">Checkout</h2>
 
         <!-- Billing Info -->
-        <h3 class="text-lg font-semibold mb-3 text-gray-700">Billing Information</h3>
+        <h3 class="text-lg font-semibold mb-3 text-white">Billing Information</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <input v-model="billing.fullName" type="text" placeholder="Full Name *" class="checkout-input" />
           <input v-model="billing.email" type="email" placeholder="Email *" class="checkout-input" />
           <input v-model="billing.phone" type="text" placeholder="Phone Number" class="checkout-input" />
           <input v-model="billing.address" type="text" placeholder="Address *" class="checkout-input" />
           <input v-model="billing.city" type="text" placeholder="City" class="checkout-input" />
-
         </div>
       </div>
 
       <!-- Right: Cart Summary -->
-      <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-        <h3 class="text-xl font-bold mb-6">Order Summary</h3>
+      <div class="bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-800">
+        <h3 class="text-xl font-bold mb-6 text-white">Order Summary</h3>
 
         <div v-if="loading" class="text-center py-8 text-gray-500">Loading cart...</div>
         <div v-else-if="cart.length === 0" class="text-center py-8 text-gray-500">Your cart is empty.</div>
@@ -32,26 +31,21 @@
             class="flex justify-between items-center border-b pb-3"
           >
             <div>
-              <p class="font-semibold">{{ item.title }}</p>
-              
+              <p class="font-semibold text-gray-400">{{ item.title }}</p>
             </div>
-            <p class="font-bold">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
+            <p class="font-bold text-gray-400">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
           </div>
         </div>
 
         <!-- Totals -->
         <div v-if="cart.length > 0" class="mt-6 border-t pt-4 space-y-2">
-          <div class="flex justify-between text-gray-700">
-            <span>Subtotal</span>
-            <span>Rs {{ subtotal.toFixed(2) }}</span>
-          </div>
-          <div class="flex justify-between text-gray-700">
-            <span>Tax (10%)</span>
-            <span>Rs {{ tax.toFixed(2) }}</span>
+          <div class="flex justify-between">
+            <span class="text-gray-400">Subtotal</span>
+            <span class="text-gray-400">Rs {{ subtotal.toFixed(2) }}</span>
           </div>
           <div class="flex justify-between font-bold text-lg">
-            <span>Total</span>
-            <span>Rs {{ total.toFixed(2) }}</span>
+            <span class="text-gray-400">Total</span>
+            <span class="text-gray-400">Rs {{ total.toFixed(2) }}</span>
           </div>
         </div>
 
@@ -140,14 +134,14 @@ onBeforeUnmount(() => {
 const subtotal = computed(() =>
   cart.value.reduce((acc, item) => acc + item.price * item.quantity, 0)
 );
-const tax = computed(() => subtotal.value * 0.1);
-const total = computed(() => subtotal.value + tax.value);
+
+// ✅ Removed tax, total = subtotal
+const total = computed(() => subtotal.value);
 
 const placeOrder = async () => {
   errorMessage.value = "";
   successMessage.value = "";
 
-  // Make phone number required
   if (!billing.value.fullName || !billing.value.email || !billing.value.address || !billing.value.phone) {
     errorMessage.value = "⚠️ Please fill in all required billing fields (including phone number).";
     return;
@@ -160,20 +154,15 @@ const placeOrder = async () => {
       userId: userId.value,
       items: cart.value,
       subtotal: subtotal.value,
-      tax: tax.value,
       total: total.value,
       billing: billing.value,
       createdAt: new Date(),
       status: "Pending",
     };
 
-    // Save in user's orders
     await addDoc(collection(db, "users", userId.value, "orders"), orderData);
-
-    // Save in global orders (for Admin)
     await addDoc(collection(db, "orders"), orderData);
 
-    // Clear cart
     for (const item of cart.value) {
       await deleteDoc(doc(db, "users", userId.value, "cart", item.id));
     }
@@ -187,12 +176,11 @@ const placeOrder = async () => {
     loadingOrder.value = false;
   }
 };
-
 </script>
 
 <style scoped>
 .checkout-input {
-  @apply w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none;
+  @apply w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-700 border-gray-700 text-white placeholder-gray-400;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;

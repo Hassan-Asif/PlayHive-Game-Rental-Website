@@ -58,44 +58,44 @@ const handleRegister = async () => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center min-h-screen bg-gray-100">
-    <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-      <h2 class="text-2xl font-bold mb-4 text-center">Register</h2>
+  <div class="flex justify-center items-center min-h-screen bg-gray-700">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-96">
+      <h2 class="text-2xl font-bold mb-4 text-center text-white">Register</h2>
 
-      <label class="block mb-2 font-medium">Name</label>
+      <label class="block mb-2 font-medium text-white">Name</label>
       <input 
         v-model="name" 
         type="text" 
         placeholder="Name" 
-        class="w-full p-2 border rounded mb-4" 
+        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700" 
       />
 
-      <label class="block mb-2 font-medium">Email</label>
+      <label class="block mb-2 font-medium text-white">Email</label>
       <input 
         v-model="email" 
         type="email" 
         placeholder="Email" 
-        class="w-full p-2 border rounded mb-4" 
+        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700" 
       />
 
-      <label class="block mb-2 font-medium">Password</label>
+      <label class="block mb-2 font-medium text-white">Password</label>
       <input 
         v-model="password" 
         type="password" 
         placeholder="Password" 
-        class="w-full p-2 border rounded mb-4" 
+        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700" 
       />
 
-      <p class="text-sm text-gray-600 mb-4 text-center">
+      <p class="text-sm text-gray-400 mb-4 text-center">
         Already have an account? 
-        <router-link to="/login" class="text-blue-600 hover:underline">
+        <router-link to="/login" class="text-indigo-600 hover:underline">
           Login
         </router-link>
       </p>
 
       <button 
         @click="handleRegister" 
-        class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition mb-2"
+        class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition transform hover:scale-105 shadow-md"
       >
         Register
       </button>
