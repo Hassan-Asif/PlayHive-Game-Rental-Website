@@ -43,8 +43,12 @@
             <input v-model="newGame.title" type="text" placeholder="Game Title" class="p-2 border rounded" required />
             <input v-model="newGame.image" type="url" placeholder="Image URL" class="p-2 border rounded" required />
             <textarea v-model="newGame.description" placeholder="Description" class="p-2 border rounded md:col-span-2" required></textarea>
-            <input v-model.number="newGame.price" type="number" placeholder="Price (Rs)" class="p-2 border rounded" required />
+            
+            <!-- NEW FIELDS -->
+            <input v-model.number="newGame.dailyPrice" type="number" placeholder="Daily Price (Rs)" class="p-2 border rounded" required />
+            <input v-model.number="newGame.weeklyPrice" type="number" placeholder="Weekly Price (Rs)" class="p-2 border rounded" required />
             <input v-model.number="newGame.rating" type="number" min="1" max="5" placeholder="Rating (1-5)" class="p-2 border rounded" required />
+            
             <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 md:col-span-2">
               Add Game
             </button>
@@ -56,33 +60,44 @@
           <li v-for="game in games" :key="game.id" class="flex justify-between items-center bg-white p-4 rounded shadow">
             <div>
               <p class="font-semibold">{{ game.title }}</p>
-              <p class="text-sm text-gray-500">Rs{{ game.price }} | ⭐ {{ game.rating }}</p>
+              <p class="text-sm text-gray-500">
+                🕹 Daily: Rs{{ game.dailyPrice }} | 📅 Weekly: Rs{{ game.weeklyPrice }} | ⭐ {{ game.rating }}
+              </p>
             </div>
             <button @click="removeGame(game.id)" class="text-red-500 hover:text-red-700">Delete</button>
           </li>
         </ul>
       </div>
 
-      <!-- Users -->
-      <div v-if="currentTab==='users'" class="animate-fadeIn">
-        <h1 class="text-3xl font-bold mb-6">Users</h1>
-        <div class="mb-4 bg-white p-4 rounded shadow text-lg font-semibold">
-          Total Registered Users: {{ users.length }}
-        </div>
-        <ul class="space-y-2">
-          <li v-for="user in users" :key="user.id || user.email" class="flex justify-between bg-white p-4 rounded shadow">
-            <span>{{ user.email }}</span>
-            <span class="text-gray-500">{{ user.role || 'user' }}</span>
-          </li>
-        </ul>
+          <!-- Users -->
+    <div v-if="currentTab==='users'" class="animate-fadeIn">
+      <h1 class="text-3xl font-bold mb-6">Users</h1>
+      
+      <!-- Total Registered Users -->
+      <div class="mb-4 bg-white p-4 rounded shadow text-lg font-semibold">
+        Total Registered Users in Database: {{ users.length }}
       </div>
+
+      <!-- User List -->
+      <ul class="space-y-2">
+        <li 
+          v-for="(user, index) in users" 
+          :key="user.id || user.email" 
+          class="flex justify-between bg-white p-4 rounded shadow"
+        >
+          <span>{{ index + 1 }}. {{ user.email }}</span>
+          <span class="text-gray-500">{{ user.role || 'user' }}</span>
+        </li>
+      </ul>
+    </div>
+
 
       <!-- Orders -->
       <div v-if="currentTab==='orders'" class="animate-fadeIn">
         <h1 class="text-3xl font-bold mb-6">Orders</h1>
         <ul class="space-y-2">
           <li 
-            v-for="order in orders" 
+            v-for="order in sortedOrders" 
             :key="order.id" 
             class="bg-white p-4 rounded shadow cursor-pointer hover:bg-gray-50"
             @click="toggleOrder(order.id)"
@@ -133,7 +148,7 @@ export default {
       email: "admin@example.com",
       registeredAdminEmail: "admin@example.com",
       currentTab: "dashboard",
-      newGame: { title: "", description: "", image: "", price: null, rating: 5 },
+      newGame: { title: "", description: "", image: "", dailyPrice: null, weeklyPrice: null, rating: 5 },
       games: [],
       users: [],
       orders: [],
@@ -144,6 +159,14 @@ export default {
     isAdmin() {
       return this.email === this.registeredAdminEmail;
     },
+    // ✅ Sort orders old → new
+    sortedOrders() {
+      return [...this.orders].sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+        return dateB - dateA; // ascending (old first)
+      });
+    }
   },
   methods: {
     tabClass(tab) {
@@ -159,7 +182,7 @@ export default {
     async addGame() {
       const docRef = await addDoc(collection(db, "games"), this.newGame);
       this.games.push({ id: docRef.id, ...this.newGame });
-      this.newGame = { title: "", description: "", image: "", price: null, rating: 5 };
+      this.newGame = { title: "", description: "", image: "", dailyPrice: null, weeklyPrice: null, rating: 5 };
     },
     async removeGame(id) {
       await deleteDoc(doc(db, "games", id));

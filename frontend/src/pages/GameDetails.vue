@@ -12,7 +12,6 @@
         <p class="text-gray-300 text-lg">{{ game.genre }} | Released: {{ game.releaseDate }}</p>
         <div class="flex items-center gap-4 mt-3">
           <span class="text-yellow-400 font-semibold">{{ game.rating }}⭐</span>
-          <span class="text-white font-bold text-xl">Rs {{ game.price.toFixed(2) }}</span>
         </div>
       </div>
     </div>

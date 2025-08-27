@@ -1,4 +1,5 @@
 <template>
+  &nbsp;
   <div class="min-h-screen bg-gray-100 py-12 px-6 md:px-12">
     <h1 class="text-4xl font-bold mb-8 text-gray-900 animate-fadeInDown">Your Cart</h1>
 
@@ -34,23 +35,11 @@
             <p class="text-gray-400 text-sm">
               Rental Plan: <span class="text-indigo-500">{{ item.rentalPlan }}</span>
             </p>
-            <div class="flex items-center gap-2 mt-2">
-              <button
-                @click="decreaseQty(item)"
-                class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition"
-                :disabled="item.quantity <= 1 || !userId"
-              >-</button>
-              <span class="px-2">{{ item.quantity }}</span>
-              <button
-                @click="increaseQty(item)"
-                class="bg-gray-200 hover:bg-gray-300 rounded px-2 transition"
-                :disabled="!userId"
-              >+</button>
-            </div>
+            
           </div>
 
           <div class="text-right">
-            <p class="font-semibold">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
+            
             <button
               @click="removeItem(item.id)"
               class="text-red-500 hover:text-red-700 mt-2 transition"

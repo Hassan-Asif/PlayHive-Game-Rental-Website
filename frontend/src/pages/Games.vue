@@ -6,6 +6,7 @@
 
     <header class="bg-gradient-to-r from-purple-700 to-indigo-800 py-12 shadow-lg">
       <div class="container mx-auto px-6 text-center">
+        &nbsp;
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Explore All Games</h1>
         <p class="text-lg text-gray-300">Browse and rent your favorite titles instantly</p>
       </div>
@@ -32,7 +33,6 @@
             <h2 class="text-xl font-bold truncate">{{ game.title }}</h2>
             <p class="text-gray-400 text-sm mt-2 line-clamp-2">{{ game.description }}</p>
             <div class="mt-4 flex items-center justify-between">
-              <span class="text-lg font-semibold text-indigo-400">Rs {{ game.price }}</span>
               <button
                 @click="goToRent(game.id)"
                 class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
@@ -80,7 +80,7 @@ export default {
     goToRent(gameId) {
       const user = auth.currentUser;
       if (!user) {
-        this.$router.push("/login");
+        this.$router.push("/games");
       } else {
         this.$router.push(`/rent/${gameId}`);
       }

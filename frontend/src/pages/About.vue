@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gray-100 text-gray-900">
+  <div class="min-h-screen bg-gray-800 text-gray-900">
     
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-r from-indigo-900 to-purple-800 text-white py-32">
       <div class="max-w-7xl mx-auto px-6 text-center">
-        <h1 class="text-5xl font-extrabold mb-4 animate-fadeInDown">About PlayHive</h1>
+        <h1 class="text-5xl font-extrabold mb-4 animate-fadeInDown">SankGaming</h1>
         <p class="text-xl text-gray-200 animate-fadeIn">
           Your ultimate platform to rent the best games instantly.
         </p>
@@ -14,26 +14,26 @@
     <!-- Our Mission -->
     <section class="max-w-6xl mx-auto px-6 py-20">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Our Mission</h2>
-        <p class="text-gray-700 text-lg">
-          PlayHive is dedicated to bringing gamers closer to the games they love without the hassle of purchasing. 
+        <h2 class="text-3xl font-bold mb-4 text-white">Our Mission</h2>
+        <p class="text-white text-lg">
+          SankGaming is dedicated to bringing gamers closer to the games they love without the hassle of purchasing. 
           Rent, play, and enjoy — anytime, anywhere.
         </p>
       </div>
 
       <!-- Milestones / Story -->
       <div class="grid md:grid-cols-3 gap-8 text-center">
-        <div class="bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
-          <h3 class="text-xl font-semibold mb-2">Founded</h3>
-          <p class="text-gray-600">2023</p>
+        <div class="bg-gray-700 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
+          <h3 class="text-xl font-semibold mb-2 text-white">Founded</h3>
+          <p class="text-gray-300">2023</p>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
-          <h3 class="text-xl font-semibold mb-2">Games Available</h3>
-          <p class="text-gray-600">100+ titles</p>
+        <div class="bg-gray-700 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
+          <h3 class="text-xl font-semibold mb-2 text-white">Games Available</h3>
+          <p class="text-gray-300">100+ titles</p>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
-          <h3 class="text-xl font-semibold mb-2">Happy Gamers</h3>
-          <p class="text-gray-600">5000+ users</p>
+        <div class="bg-gray-700 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
+          <h3 class="text-xl font-semibold mb-2 text-white">Happy Gamers</h3>
+          <p class="text-gray-300">5000+ users</p>
         </div>
       </div>
     </section>

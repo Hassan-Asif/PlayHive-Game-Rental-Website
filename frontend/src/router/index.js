@@ -9,12 +9,14 @@ import Register from "../pages/Register.vue";
 import GameRent from "../pages/GameRent.vue";
 import Games from "../pages/Games.vue";
 import Checkout from "../pages/Checkout.vue";
+import CheckoutMessage from "../pages/CheckoutMessage.vue";
 
 const routes = [
   { path: "/", component: Home },
   { path: "/game/:id", component: GameDetails },
   { path: "/cart", component: Cart },
   { path: "/about", component: About },
+  { path: "/checkoutmessage", component: CheckoutMessage },
   { 
     path: "/admin", 
     component: Admin, 

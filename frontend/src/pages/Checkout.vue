@@ -14,7 +14,7 @@
           <input v-model="billing.phone" type="text" placeholder="Phone Number" class="checkout-input" />
           <input v-model="billing.address" type="text" placeholder="Address *" class="checkout-input" />
           <input v-model="billing.city" type="text" placeholder="City" class="checkout-input" />
-          <input v-model="billing.postalCode" type="text" placeholder="Postal Code" class="checkout-input" />
+
         </div>
       </div>
 
@@ -33,7 +33,7 @@
           >
             <div>
               <p class="font-semibold">{{ item.title }}</p>
-              <p class="text-sm text-gray-500">x{{ item.quantity }}</p>
+              
             </div>
             <p class="font-bold">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
           </div>
@@ -147,8 +147,9 @@ const placeOrder = async () => {
   errorMessage.value = "";
   successMessage.value = "";
 
-  if (!billing.value.fullName || !billing.value.email || !billing.value.address) {
-    errorMessage.value = "⚠️ Please fill in all required billing fields.";
+  // Make phone number required
+  if (!billing.value.fullName || !billing.value.email || !billing.value.address || !billing.value.phone) {
+    errorMessage.value = "⚠️ Please fill in all required billing fields (including phone number).";
     return;
   }
 
@@ -178,7 +179,7 @@ const placeOrder = async () => {
     }
 
     successMessage.value = "✅ Order placed successfully!";
-    setTimeout(() => router.push("/"), 2000);
+    setTimeout(() => router.push("/checkoutmessage"), 2000);
   } catch (err) {
     console.error(err);
     errorMessage.value = "❌ Failed to place order. Try again.";
@@ -186,6 +187,7 @@ const placeOrder = async () => {
     loadingOrder.value = false;
   }
 };
+
 </script>
 
 <style scoped>

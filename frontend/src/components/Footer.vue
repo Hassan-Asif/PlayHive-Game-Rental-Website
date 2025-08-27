@@ -1,10 +1,11 @@
 <template>
-  <footer class="bg-gray-800 text-gray-300 py-10">
-    <div class="border-t border-gray-700 mt-10 pt-4 text-center text-gray-500 text-xs">
+  <footer class="bg-gray-800 text-gray-300 py-3">
+   
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
       
       <!-- Company Info -->
       <div>
+        &nbsp;
         <h2 class="text-xl font-bold text-white mb-2">SankGaming</h2>
         <p class="text-gray-400">
           Best ready to play gaming website
@@ -35,9 +36,10 @@
       
       </div>
     <!-- Footer Bottom -->
-    <div class="border-t border-gray-700 mt-10 pt-4 text-center text-gray-500 text-xs">
+
+    <div class="border-t border-gray-700 mt-10 pt-4 text-center text-gray-200 text-medium">
+      &nbsp;
       © {{ new Date().getFullYear() }} AqilLabs. All rights reserved.
-    </div>
     </div>
   </footer>
 </template>
