@@ -22,11 +22,13 @@
     <!-- Featured Games Section -->
     <section class="py-20">
       <h2 class="text-3xl font-bold text-center mb-12 animate-fadeInUp">Featured Games</h2>
-      <div class="grid gap-8 px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+      <!-- Mobile: horizontal scroll / Desktop: grid -->
+      <div class="flex gap-6 px-6 overflow-x-auto sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 snap-x snap-mandatory">
         <div
           v-for="game in featuredGames"
           :key="game.id"
-          class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-500"
+          class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-500 min-w-[250px] snap-center"
         >
           <img :src="game.image" :alt="game.title" class="w-full h-40 object-cover"/>
           <div class="p-4">
@@ -46,16 +48,18 @@
     <!-- How It Works Section -->
     <section class="py-20 bg-gray-800">
       <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
-      <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 px-6 text-center">
-        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500">
+
+      <!-- Mobile: horizontal scroll / Desktop: grid -->
+      <div class="flex gap-6 px-6 overflow-x-auto md:grid md:grid-cols-3 snap-x snap-mandatory max-w-6xl mx-auto text-center">
+        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500 min-w-[250px] snap-center">
           <h3 class="text-xl font-semibold mb-2">Choose Your Game</h3>
           <p class="text-gray-300">Browse our wide collection and pick your favorite.</p>
         </div>
-        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500">
+        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500 min-w-[250px] snap-center">
           <h3 class="text-xl font-semibold mb-2">Rent Online</h3>
           <p class="text-gray-300">Pay online and get instant access to the game.</p>
         </div>
-        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500">
+        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500 min-w-[250px] snap-center">
           <h3 class="text-xl font-semibold mb-2">Play & Enjoy</h3>
           <p class="text-gray-300">Download or play online and enjoy your gaming session.</p>
         </div>

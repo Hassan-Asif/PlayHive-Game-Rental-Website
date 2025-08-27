@@ -1,24 +1,24 @@
 <template>
   <div class="min-h-screen bg-gray-900 text-white">
     <!-- Header -->
-    &nbsp;
-    &nbsp;
-
     <header class="bg-gradient-to-r from-purple-700 to-indigo-800 py-12 shadow-lg">
       <div class="container mx-auto px-6 text-center">
-        &nbsp;
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Explore All Games</h1>
         <p class="text-lg text-gray-300">Browse and rent your favorite titles instantly</p>
       </div>
     </header>
 
-    <!-- Games Grid -->
+    <!-- Games Section -->
     <section class="py-16 container mx-auto px-6">
-      <div v-if="games.length" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <!-- Mobile: horizontal scroll / Desktop: grid -->
+      <div 
+        v-if="games.length" 
+        class="flex gap-6 overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 snap-x snap-mandatory"
+      >
         <div
           v-for="game in games"
           :key="game.id"
-          class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
+          class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-all duration-300 min-w-[250px] snap-center"
         >
           <!-- Game Image -->
           <div class="relative h-48">
@@ -35,7 +35,7 @@
             <div class="mt-4 flex items-center justify-between">
               <button
                 @click="goToRent(game.id)"
-                class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition w-full"
               >
                 Rent Now
               </button>
@@ -83,7 +83,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* Limit description to 2 lines */
