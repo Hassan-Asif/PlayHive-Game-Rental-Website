@@ -3,9 +3,13 @@
     <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       
       <!-- Logo -->
-      <p class="text-2xl font-bold cursor-pointer hover:text-indigo-500 transition-colors">
-        SankGaming
-      </p>
+      <router-link 
+      to="/" 
+      class="text-2xl font-bold cursor-pointer hover:text-indigo-500 transition-colors"
+    >
+      SankGaming
+    </router-link>
+
       
       <!-- Desktop Menu -->
       <ul class="hidden md:flex items-center gap-8">

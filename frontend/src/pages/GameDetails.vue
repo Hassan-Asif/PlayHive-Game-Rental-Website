@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Hero Section -->
-    <div v-if="game" class="relative w-full h-96 overflow-hidden">
+    <div v-if="game" class="relative w-full h-[400px] md:h-[500px] overflow-hidden bg-black">
       <img
         :src="game.image"
         :alt="game.name"
-        class="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110"
+        class="w-full h-full object-contain md:object-cover"
       />
       <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-6">
         <h1 class="text-4xl font-bold text-white mb-2">{{ game.name }}</h1>
@@ -14,7 +14,8 @@
           <span class="text-yellow-400 font-semibold">{{ game.rating }}⭐</span>
         </div>
       </div>
-    </div>
+</div>
+
 
     <div v-else class="text-center py-24 text-gray-600 font-semibold">
       Loading game details...
