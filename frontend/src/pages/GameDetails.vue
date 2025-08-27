@@ -11,7 +11,6 @@
         <h1 class="text-4xl font-bold text-white mb-2">{{ game.name }}</h1>
         <p class="text-gray-300 text-lg">{{ game.genre }} | Released: {{ game.releaseDate }}</p>
         <div class="flex items-center gap-4 mt-3">
-          <span class="text-yellow-400 font-semibold">{{ game.rating }}⭐</span>
         </div>
       </div>
     </div>
@@ -43,7 +42,6 @@
               <li v-for="review in game.reviews" :key="review.id" class="border p-4 rounded-lg">
                 <p class="font-semibold">{{ review.user }}</p>
                 <p>{{ review.comment }}</p>
-                <p class="text-yellow-400">{{ review.rating }}⭐</p>
               </li>
             </ul>
             <ul v-if="currentTab === 'System Requirements'" class="space-y-2">

@@ -27,9 +27,7 @@
           <!-- Game Image -->
           <div class="relative h-48">
             <img :src="game.image" :alt="game.title" class="w-full h-full object-cover" />
-            <div class="absolute top-2 right-2 bg-indigo-600 px-2 py-1 rounded text-xs font-semibold">
-              ⭐ {{ game.rating }}
-            </div>
+            
           </div>
 
           <!-- Game Info -->

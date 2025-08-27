@@ -19,7 +19,6 @@
         <div class="p-8 w-full md:w-1/2 bg-gray-900">
           <h1 class="text-3xl font-bold mb-2 text-white">{{ game.title }}</h1>
           <p class="text-gray-200 mb-4">{{ game.description }}</p>
-          <p class="text-yellow-500 mb-6">⭐ {{ game.rating }}/5</p>
         </div>
       </div>
 
