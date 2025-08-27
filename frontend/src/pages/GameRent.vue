@@ -7,11 +7,11 @@
       <div class="flex flex-col md:flex-row">
         
         <!-- Game Image -->
-        <div class="bg-gray-900 flex justify-center items-center w-full md:w-1/2 h-[100px] md:h-[300px]">
+        <div class="bg-gray-900 flex justify-center items-center w-full md:w-1/2 h-[300px] sm:h-[400px] md:h-[450px] lg:h-[400px]">
           <img 
             :src="game.image" 
             :alt="game.title" 
-            class="max-h-full max-w-full object-contain"
+            class="w-full h-full object-cover"
           />
         </div>
 
