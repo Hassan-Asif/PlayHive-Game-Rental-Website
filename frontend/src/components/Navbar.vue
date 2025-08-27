@@ -7,7 +7,7 @@
         SankGaming
       </p>
       
-      <!-- Menu Links (Desktop) -->
+      <!-- Desktop Menu -->
       <ul class="hidden md:flex items-center gap-8">
         <li><router-link to="/" class="hover:text-indigo-500 transition-colors">Home</router-link></li>
         <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
@@ -22,7 +22,7 @@
         </li>
       </ul>
       
-      <!-- Auth Buttons (only if logged in) -->
+      <!-- Desktop Logout -->
       <div class="hidden md:flex items-center gap-4">
         <button 
           v-if="user" 
@@ -32,46 +32,45 @@
           🚪
         </button>
       </div>
-      </nav>
 
-     <!-- Mobile Menu -->
-<transition name="slide-fade">
-  <ul v-if="menuOpen" class="md:hidden bg-gray-800 px-6 py-4 flex flex-col gap-4">
-    <li>
-      <router-link to="/" class="hover:text-indigo-500 transition-colors" @click.native="closeMenu">
-        Home
-      </router-link>
-    </li>
-    <li>
-      <router-link to="/games" class="hover:text-indigo-500 transition-colors" @click.native="closeMenu">
-        Games
-      </router-link>
-    </li>
-    <li>
-      <router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors" @click.native="closeMenu">
-        How It Works
-      </router-link>
-    </li>
-    <li>
-      <router-link to="/about" class="hover:text-indigo-500 transition-colors" @click.native="closeMenu">
-        About
-      </router-link>
-    </li>
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button @click="toggleMenu" class="focus:outline-none">
+          <!-- Hamburger -->
+          <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" 
+               class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <!-- Close (X) -->
+          <svg v-else xmlns="http://www.w3.org/2000/svg" 
+               class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
 
-    <!-- Cart -->
-    <li v-if="user">
-      <router-link to="/cart" class="hover:text-indigo-500 text-xl" @click.native="closeMenu">
-        🛒
-      </router-link>
-    </li>
+    <!-- Mobile Menu -->
+    <transition name="slide-fade">
+      <ul v-if="menuOpen" class="md:hidden bg-gray-800 px-6 py-4 flex flex-col gap-4">
+        <li><router-link to="/" class="hover:text-indigo-500 transition-colors">Home</router-link></li>
+        <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
+        <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
+        <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
 
-    <!-- Logout -->
-    <li v-if="user">
-      <button @click="logout" class="hover:text-red-500 text-xl">🚪</button>
-    </li>
-  </ul>
-</transition>
+        <!-- Cart -->
+        <li v-if="user">
+          <router-link to="/cart" class="hover:text-indigo-500 text-xl">🛒</router-link>
+        </li>
 
+        <!-- Logout -->
+        <li v-if="user">
+          <button @click="logout" class="hover:text-red-500 text-xl">🚪</button>
+        </li>
+      </ul>
+    </transition>
   </header>
 </template>
 
@@ -90,6 +89,11 @@ export default {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       this.user = user;
+    });
+
+    // ✅ Automatically close menu on route change
+    this.$router.afterEach(() => {
+      this.menuOpen = false;
     });
   },
   methods: {
