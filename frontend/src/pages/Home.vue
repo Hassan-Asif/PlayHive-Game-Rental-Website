@@ -24,7 +24,9 @@
       <h2 class="text-3xl font-bold text-center mb-12 animate-fadeInUp">Featured Games</h2>
 
       <!-- Mobile: horizontal scroll / Desktop: grid -->
-      <div class="flex gap-6 px-6 overflow-x-auto sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 snap-x snap-mandatory">
+      <div class="flex gap-6 px-6 overflow-x-auto snap-x snap-mandatory 
+         sm:grid sm:gap-8 sm:overflow-visible sm:snap-none 
+         sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div
           v-for="game in featuredGames"
           :key="game.id"

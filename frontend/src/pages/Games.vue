@@ -13,12 +13,16 @@
       <!-- Mobile: horizontal scroll / Desktop: grid -->
       <div 
         v-if="games.length" 
-        class="flex gap-6 overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 snap-x snap-mandatory"
+        class="flex gap-6 overflow-x-auto snap-x snap-mandatory
+               sm:grid sm:gap-8 sm:overflow-visible sm:snap-none 
+               sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
         <div
           v-for="game in games"
           :key="game.id"
-          class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-all duration-300 min-w-[250px] snap-center"
+          class="bg-gray-800 rounded-xl shadow-lg overflow-hidden 
+                 transform hover:scale-105 hover:shadow-2xl transition-all duration-300 
+                 min-w-[250px] snap-center sm:min-w-0"
         >
           <!-- Game Image -->
           <div class="relative h-48">
