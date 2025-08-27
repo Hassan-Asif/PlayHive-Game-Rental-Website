@@ -67,7 +67,7 @@ const handleRegister = async () => {
         v-model="name" 
         type="text" 
         placeholder="Name" 
-        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700" 
+        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700 text-white" 
       />
 
       <label class="block mb-2 font-medium text-white">Email</label>
@@ -75,7 +75,7 @@ const handleRegister = async () => {
         v-model="email" 
         type="email" 
         placeholder="Email" 
-        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700" 
+        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700 text-white" 
       />
 
       <label class="block mb-2 font-medium text-white">Password</label>
@@ -83,7 +83,7 @@ const handleRegister = async () => {
         v-model="password" 
         type="password" 
         placeholder="Password" 
-        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700" 
+        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700 text-white" 
       />
 
       <p class="text-sm text-gray-400 mb-4 text-center">

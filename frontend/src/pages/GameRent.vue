@@ -26,13 +26,19 @@
       <!-- Rental Plan Section -->
       <div class="p-8 bg-gray-900 rounded-b-2xl shadow-inner">
         <h2 class="text-2xl font-bold mb-4 text-white">Choose Your Rental Plan</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
+
+        <!-- Mobile: horizontal scroll / Desktop: grid -->
+        <div 
+          class="flex gap-6 overflow-x-auto snap-x snap-mandatory
+                md:grid md:gap-6 md:overflow-visible md:snap-none
+                md:grid-cols-2"
+        >
           <!-- Daily Plan -->
           <div 
             @click="selectPlan('daily')" 
             :class="planClass('daily')" 
-            class="cursor-pointer p-6 rounded-xl border hover:shadow-lg transition">
+            class="cursor-pointer p-6 rounded-xl border hover:shadow-lg transition min-w-[250px] snap-center md:min-w-0"
+          >
             <h3 class="text-xl font-semibold text-white">Daily Plan</h3>
             <p class="text-gray-200 mt-2">Rent this game for a full day.</p>
             <p class="text-indigo-600 font-bold mt-4">
@@ -44,14 +50,14 @@
           <div 
             @click="selectPlan('weekly')" 
             :class="planClass('weekly')" 
-            class="cursor-pointer p-6 rounded-xl border hover:shadow-lg transition">
+            class="cursor-pointer p-6 rounded-xl border hover:shadow-lg transition min-w-[250px] snap-center md:min-w-0"
+          >
             <h3 class="text-xl font-semibold text-white">Weekly Plan</h3>
             <p class="text-gray-200 mt-2">Rent this game for 7 days.</p>
             <p class="text-indigo-600 font-bold mt-4">
               Rs {{ game.weeklyPrice }} / week
             </p>
           </div>
-
         </div>
 
         <!-- Selected Plan Summary -->
