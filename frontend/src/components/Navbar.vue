@@ -70,6 +70,11 @@
         <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
         <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
 
+        <!-- ✅ Admin link for mobile -->
+        <li v-if="user && user.email === 'onlyadmin@gmail.com'">
+          <router-link to="/admin" class="hover:text-indigo-500 transition-colors">Admin</router-link>
+        </li>
+
         <!-- Cart -->
         <li v-if="user">
           <router-link to="/cart" class="hover:text-indigo-500 text-xl">🛒</router-link>
@@ -81,6 +86,7 @@
         </li>
       </ul>
     </transition>
+
   </header>
 </template>
 
