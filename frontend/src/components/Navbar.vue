@@ -81,9 +81,16 @@
         </li>
 
         <!-- Logout -->
-        <li v-if="user">
-          <button @click="logout" class="hover:text-red-500 text-xl">🚪</button>
-        </li>
+        
+        <button 
+        v-if="user" 
+        @click="logout" 
+        class="btn btn-ghost btn-circle"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-base-content opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
+        </svg>
+      </button>
       </ul>
     </transition>
 
