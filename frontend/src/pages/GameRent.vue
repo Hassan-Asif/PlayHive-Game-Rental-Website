@@ -7,11 +7,14 @@
       <div class="flex flex-col md:flex-row">
         
         <!-- Game Image -->
-        <div class="bg-gray-900 flex justify-center items-center w-full md:w-1/2 h-[300px] sm:h-[400px] md:h-[450px] lg:h-[400px]">
+        <div 
+          class="bg-gray-900 flex justify-center items-center w-full md:w-1/2 
+                h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden rounded-tl-2xl md:rounded-tl-none md:rounded-l-2xl"
+        >
           <img 
             :src="game.image" 
             :alt="game.title" 
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
 

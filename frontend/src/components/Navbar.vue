@@ -17,24 +17,30 @@
         <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
         <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
         <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
-
-        <!-- Cart only if logged in -->
-        <li v-if="user">
-          <router-link to="/cart" class="hover:text-indigo-500 text-xl">
-            🛒
-          </router-link>
-        </li>
+        <!-- Admin Link (only visible to admin) -->
+          <li v-if="user && user.email === 'onlyadmin@gmail.com'">
+            <router-link to="/admin" class="hover:text-indigo-500 transition-colors">Admin</router-link>
+          </li>        
       </ul>
       
       <!-- Desktop Logout -->
       <div class="hidden md:flex items-center gap-4">
-        <button 
-          v-if="user" 
-          @click="logout" 
-          class="hover:text-red-500 text-xl"
-        >
-          🚪
+        <button v-if="user">
+          <!-- Cart only if logged in -->
+          <router-link to="/cart" class="hover:text-indigo-500 text-xl">
+            🛒
+          </router-link>
         </button>
+        <button 
+        v-if="user" 
+        @click="logout" 
+        class="btn btn-ghost btn-circle"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-base-content opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
+        </svg>
+      </button>
+        
       </div>
 
       <!-- Mobile Menu Button -->

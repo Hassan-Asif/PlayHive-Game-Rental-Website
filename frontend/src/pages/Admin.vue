@@ -2,8 +2,7 @@
   <div v-if="isAdmin" class="flex min-h-screen bg-gray-700">
     <!-- Sidebar -->
     <aside class="w-64 bg-gray-900 text-white flex flex-col">
-      <div class="text-2xl font-bold p-6 border-b border-gray-800">PlayHive Admin</div>
-      <nav class="flex-1 p-6 space-y-4">
+      <nav class="flex-1 p-6 space-y-4 pt-20">
         <button @click="currentTab='dashboard'" :class="tabClass('dashboard')">Dashboard</button>
         <button @click="currentTab='games'" :class="tabClass('games')">Manage Games</button>
         <button @click="currentTab='users'" :class="tabClass('users')">Users</button>
