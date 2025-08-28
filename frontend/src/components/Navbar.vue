@@ -13,7 +13,6 @@
       
       <!-- Desktop Menu -->
       <ul class="hidden md:flex items-center gap-8">
-        <li><router-link to="/" class="hover:text-indigo-500 transition-colors">Home</router-link></li>
         <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
         <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
         <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
@@ -65,7 +64,6 @@
     <!-- Mobile Menu -->
     <transition name="slide-fade">
       <ul v-if="menuOpen" class="md:hidden bg-gray-800 px-6 py-4 flex flex-col gap-4">
-        <li><router-link to="/" class="hover:text-indigo-500 transition-colors">Home</router-link></li>
         <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
         <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
         <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
