@@ -1,47 +1,53 @@
 <template>
-  &nbsp;
-  <div class="min-h-screen bg-gray-700 py-12 px-6 md:px-12">
-    <h1 class="text-4xl font-bold mb-8 text-white animate-fadeInDown">Your Cart</h1>
+  <div class="min-h-screen bg-gray-900 pt-20 px-6 md:px-12"> 
+    <h1 class="text-4xl font-extrabold mb-10 text-center bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent animate-fadeInDown">
+      Your Cart
+    </h1>
 
     <!-- Loading State -->
-    <div v-if="loading" class="text-center py-32 text-white">
+    <div v-if="loading" class="text-center py-32 text-gray-300">
       Loading your cart...
     </div>
 
     <!-- Empty Cart -->
     <div v-else-if="cartItems.length === 0" class="text-center py-32">
-      <p class="text-white text-xl mb-4">Your cart is empty.</p>
-      &nbsp;
+      <p class="text-gray-300 text-xl mb-6">Your cart is empty.</p>
       <router-link
         to="/games"
-        class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg transition transform hover:scale-105"
+        class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl shadow-lg transition transform hover:scale-105"
       >
         Browse Games
       </router-link>
     </div>
 
     <!-- Cart Items -->
-    <div v-else class="grid md:grid-cols-3 gap-8">
+    <div v-else class="grid md:grid-cols-3 gap-10">
       <!-- Items List -->
-      <div class="md:col-span-2 space-y-4">
+      <div class="md:col-span-2 space-y-6">
         <div
           v-for="item in cartItems"
           :key="item.id"
-          class="bg-gray-800 p-4 rounded-lg shadow flex items-center gap-4 hover:shadow-2xl transition-all animate-fadeIn"
+          class="bg-gray-800 p-5 rounded-2xl shadow-lg flex items-center gap-6 hover:shadow-2xl transition-all animate-fadeIn"
         >
-          <img :src="item.image" :alt="item.title" class="w-24 h-24 object-cover rounded-lg" />
+          <!-- Game Image -->
+          <img :src="item.image" :alt="item.title" class="w-28 h-28 object-cover rounded-xl shadow" />
+
+          <!-- Game Info -->
           <div class="flex-1">
-            <h2 class="font-semibold text-lg text-white">{{ item.title }}</h2>
-            <p class="text-gray-400">{{ item.description }}</p>
-            <p class="text-gray-400 text-sm">
-              Rental Plan: <span class="text-indigo-500">{{ item.rentalPlan }}</span>
+            <h2 class="font-semibold text-xl text-white">{{ item.title }}</h2>
+            <p class="text-gray-400 text-sm mt-1">
+              Rental Plan: <span class="text-indigo-400 font-medium">{{ item.rentalPlan }}</span>
             </p>
+            <p class="text-indigo-500 font-bold mt-2">Rs {{ item.price.toFixed(2) }}</p>
+
+            
           </div>
 
+          <!-- Remove -->
           <div class="text-right">
             <button
               @click="removeItem(item.id)"
-              class="text-red-500 hover:text-red-700 mt-2 transition"
+              class="text-red-500 hover:text-red-600 transition text-sm font-medium"
             >
               Remove
             </button>
@@ -50,19 +56,22 @@
       </div>
 
       <!-- Order Summary -->
-      <div class="bg-gray-800 p-6 rounded-lg shadow animate-fadeIn">
-        <h2 class="text-2xl font-bold mb-4 text-white">Order Summary</h2>
-        <div class="flex justify-between mb-2">
+      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg animate-fadeIn">
+        <h2 class="text-2xl font-bold mb-6 text-white">Order Summary</h2>
+
+        <div class="flex justify-between mb-3">
           <span class="text-gray-400">Subtotal</span>
-          <span class="text-gray-400">Rs {{ subtotal.toFixed(2) }}</span>
+          <span class="text-gray-200">Rs {{ subtotal.toFixed(2) }}</span>
         </div>
-        <div class="flex justify-between font-bold text-lg border-t border-gray-300 pt-2 mb-4">
-          <span class="text-gray-400">Total</span>
-          <span class="text-gray-400">Rs {{ subtotal.toFixed(2) }}</span>
+
+        <div class="flex justify-between text-lg font-semibold border-t border-gray-700 pt-3 mb-6">
+          <span class="text-gray-300">Total</span>
+          <span class="text-indigo-400">Rs {{ subtotal.toFixed(2) }}</span>
         </div>
+
         <button
           @click="goToCheckout"
-          class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition transform hover:scale-105"
+          class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 rounded-xl shadow-md transition transform hover:scale-105 disabled:opacity-50"
           :disabled="cartItems.length === 0"
         >
           Proceed to Checkout
@@ -92,7 +101,7 @@ export default {
       this.userId = user ? user.uid : null;
 
       if (this.userId) {
-        // 🔹 Logged-in user cart from Firestore
+        // Logged-in user cart from Firestore
         const cartRef = collection(db, "users", this.userId, "cart");
         const q = query(cartRef);
         this.unsubscribe = onSnapshot(
@@ -110,7 +119,7 @@ export default {
           }
         );
       } else {
-        // 🔹 Guest cart from localStorage (ensure unique IDs)
+        // Guest cart from localStorage (ensure unique IDs)
         const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]").map((item) => {
           if (!item.id) {
             item.id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
@@ -134,7 +143,6 @@ export default {
   methods: {
     async increaseQty(item) {
       if (!this.userId) {
-        // 🔹 Guest cart qty update
         this.cartItems = this.cartItems.map((cartItem) =>
           cartItem.id === item.id ? { ...cartItem, quantity: (cartItem.quantity || 1) + 1 } : cartItem
         );
@@ -146,7 +154,6 @@ export default {
     },
     async decreaseQty(item) {
       if (!this.userId) {
-        // 🔹 Guest cart qty update
         if ((item.quantity || 1) <= 1) return;
         this.cartItems = this.cartItems.map((cartItem) =>
           cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
@@ -160,11 +167,9 @@ export default {
     },
     async removeItem(itemId) {
       if (this.userId) {
-        // 🔹 Firestore remove
         const itemRef = doc(db, "users", this.userId, "cart", itemId);
         await deleteDoc(itemRef);
       } else {
-        // 🔹 Guest cart remove one item only
         this.cartItems = this.cartItems.filter((item) => item.id !== itemId);
         localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
       }

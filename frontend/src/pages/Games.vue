@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-[#0f172a] text-[#f1f5f9] overflow-x-hidden">
     <!-- Header -->
-    <header class="bg-gradient-to-r from-purple-700 to-indigo-800 py-12 shadow-lg">
+    <header class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32">
       <div class="container mx-auto px-6 text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Explore All Games</h1>
-        <p class="text-lg text-gray-300">Browse and rent your favorite titles instantly</p>
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInDown text-[#6366f1]">Explore All Games</h1>
+        <p class="text-lg md:text-xl text-[#94a3b8] mb-8 animate-fadeIn">Browse and rent your favorite titles instantly</p>
       </div>
     </header>
 
@@ -20,24 +20,27 @@
         <div
           v-for="game in games"
           :key="game.id"
-          class="bg-gray-800 rounded-xl shadow-lg overflow-hidden 
-                 transform hover:scale-105 hover:shadow-2xl transition-all duration-300 
-                 min-w-[250px] snap-center sm:min-w-0"
+          class="group bg-gray-900 border border-gray-800 rounded-2xl shadow-lg 
+                 overflow-hidden hover:shadow-indigo-600/20 transition-transform duration-500 
+                 transform hover:scale-[1.03] min-w-[250px] snap-center sm:min-w-0"
         >
           <!-- Game Image -->
           <div class="relative h-48">
-            <img :src="game.image" :alt="game.title" class="w-full h-full object-cover" />
-            
+            <img :src="game.image" :alt="game.title" 
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
           </div>
 
           <!-- Game Info -->
-          <div class="p-5">
-            <h2 class="text-xl font-bold truncate">{{ game.title }}</h2>
-            <p class="text-gray-400 text-sm mt-2 line-clamp-2">{{ game.description }}</p>
-            <div class="mt-4 flex items-center justify-between">
+          <div class="p-5 flex flex-col gap-3">
+            <h2 class="text-lg font-bold text-white truncate">{{ game.title }}</h2>
+            <p class="text-gray-400 text-sm line-clamp-2">{{ game.description }}</p>
+
+            <div class="mt-4">
               <button
                 @click="goToRent(game.id)"
-                class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition w-full"
+                class="w-full bg-indigo-600/90 hover:bg-indigo-700 text-white px-4 py-2 
+                       rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-600/30"
               >
                 Rent Now
               </button>
@@ -47,7 +50,7 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center text-gray-400">
+      <div v-else class="text-center text-gray-400 py-20">
         <p class="text-xl">No games available yet. Please check back later!</p>
       </div>
     </section>
@@ -67,7 +70,7 @@ export default {
   async mounted() {
     try {
       const db = getFirestore();
-      const gamesCol = collection(db, "games"); // 'games' collection in Firestore
+      const gamesCol = collection(db, "games");
       const gamesSnapshot = await getDocs(gamesCol);
       this.games = gamesSnapshot.docs.map(doc => ({
         id: doc.id,
@@ -79,7 +82,6 @@ export default {
   },
   methods: {
     goToRent(gameId) {
-      // ✅ Always go to rent page, no matter if logged in or not
       this.$router.push(`/rent/${gameId}`);
     },
   },

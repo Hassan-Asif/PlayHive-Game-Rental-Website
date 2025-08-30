@@ -1,97 +1,98 @@
 <template>
-  <header class="bg-gray-900 text-white fixed w-full z-50 shadow-lg">
-    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      
+  <header class="fixed w-full z-50 px-3 sm:px-5 py-2">
+    <div
+      class="rounded-xl sm:rounded-2xl border border-indigo-500/40 
+             bg-gradient-to-r from-slate-900/95 to-slate-800/95 
+             backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.5)]
+             flex items-center justify-between gap-4 px-4 sm:px-6 py-3"
+    >
       <!-- Logo -->
       <router-link 
-      to="/" 
-      class="text-2xl font-bold cursor-pointer hover:text-indigo-500 transition-colors"
-    >
-      SankGaming
-    </router-link>
-
-      
-      <!-- Desktop Menu -->
-      <ul class="hidden md:flex items-center gap-8">
-        <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
-        <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
-        <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
-        <!-- Admin Link (only visible to admin) -->
-          <li v-if="user && user.email === 'onlyadmin@gmail.com'">
-            <router-link to="/admin" class="hover:text-indigo-500 transition-colors">Admin</router-link>
-          </li>        
-      </ul>
-      
-      <!-- Desktop Logout -->
-      <div class="hidden md:flex items-center gap-4">
-        <button v-if="user">
-          <!-- Cart only if logged in -->
-          <router-link to="/cart" class="hover:text-indigo-500 text-xl">
-            🛒
-          </router-link>
-        </button>
-        <button 
-        v-if="user" 
-        @click="logout" 
-        class="btn btn-ghost btn-circle"
+        to="/"
+        class="text-xl sm:text-2xl font-bold tracking-wide 
+               bg-gradient-to-r from-indigo-400 to-cyan-400 
+               bg-clip-text text-transparent cursor-pointer"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-base-content opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
-        </svg>
-      </button>
-        
+        SankGaming
+      </router-link>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-6 text-gray-300 font-medium">
+        <router-link to="/games" class="transition-all hover:text-indigo-400 hover:scale-105">Games</router-link>
+        <router-link to="/#how-it-works" class="transition-all hover:text-indigo-400 hover:scale-105">How It Works</router-link>
+        <router-link to="/about" class="transition-all hover:text-indigo-400 hover:scale-105">About</router-link>
+
+        <!-- Admin Only -->
+        <router-link 
+          v-if="user && user.email === 'onlyadmin@gmail.com'" 
+          to="/admin" 
+          class="transition-all hover:text-cyan-400 hover:scale-105"
+        >
+          Admin
+        </router-link>
+      </nav>
+
+      <!-- Right side (cart + logout) -->
+      <div class="hidden md:flex items-center gap-3">
+        <!-- Cart -->
+        <router-link v-if="user" to="/cart" 
+          class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm text-lg text-cyan-400"
+        >
+          🛒
+        </router-link>
+
+        <!-- Logout -->
+        <button 
+          v-if="user" 
+          @click="logout"
+          class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-6 w-6 text-indigo-400" 
+               fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
+          </svg>
+        </button>
       </div>
 
       <!-- Mobile Menu Button -->
-      <div class="md:hidden">
-        <button @click="toggleMenu" class="focus:outline-none">
-          <!-- Hamburger -->
-          <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" 
-               class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-          <!-- Close (X) -->
-          <svg v-else xmlns="http://www.w3.org/2000/svg" 
-               class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-    </nav>
+      <button @click="toggleMenu" class="md:hidden p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all shadow-sm">
+        <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
 
     <!-- Mobile Menu -->
     <transition name="slide-fade">
-      <ul v-if="menuOpen" class="md:hidden bg-gray-800 px-6 py-4 flex flex-col gap-4">
-        <li><router-link to="/games" class="hover:text-indigo-500 transition-colors">Games</router-link></li>
-        <li><router-link to="/#how-it-works" class="hover:text-indigo-500 transition-colors">How It Works</router-link></li>
-        <li><router-link to="/about" class="hover:text-indigo-500 transition-colors">About</router-link></li>
+      <ul v-if="menuOpen" 
+          class="md:hidden mt-2 rounded-xl border border-indigo-500/40 
+                 bg-gradient-to-r from-slate-900/95 to-slate-800/95 
+                 backdrop-blur shadow-lg flex flex-col gap-3 px-6 py-4 text-gray-300 font-medium">
+        
+        <router-link to="/games" class="hover:text-indigo-400 transition">Games</router-link>
+        <router-link to="/#how-it-works" class="hover:text-indigo-400 transition">How It Works</router-link>
+        <router-link to="/about" class="hover:text-indigo-400 transition">About</router-link>
 
-        <!-- ✅ Admin link for mobile -->
-        <li v-if="user && user.email === 'onlyadmin@gmail.com'">
-          <router-link to="/admin" class="hover:text-indigo-500 transition-colors">Admin</router-link>
-        </li>
+        <!-- Admin link (mobile) -->
+        <router-link v-if="user && user.email === 'onlyadmin@gmail.com'" to="/admin" class="hover:text-cyan-400 transition">Admin</router-link>
 
         <!-- Cart -->
-        <li v-if="user">
-          <router-link to="/cart" class="hover:text-indigo-500 text-xl">🛒</router-link>
-        </li>
+        <router-link v-if="user" to="/cart" class="hover:text-cyan-400 text-lg">🛒</router-link>
 
         <!-- Logout -->
-        
-        <button 
-        v-if="user" 
-        @click="logout" 
-        class="btn btn-ghost btn-circle"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-base-content opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
-        </svg>
-      </button>
+        <button v-if="user" @click="logout" 
+          class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
+          </svg>
+        </button>
       </ul>
     </transition>
-
   </header>
 </template>
 
@@ -112,7 +113,6 @@ export default {
       this.user = user;
     });
 
-    // ✅ Automatically close menu on route change
     this.$router.afterEach(() => {
       this.menuOpen = false;
     });
@@ -133,7 +133,6 @@ export default {
 </script>
 
 <style scoped>
-/* Mobile slide-down animation */
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }

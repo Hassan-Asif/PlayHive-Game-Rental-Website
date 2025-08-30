@@ -3,49 +3,52 @@
     <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
       
       <!-- Left: Checkout Form -->
-      <div class="lg:col-span-2 bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-800">
+      <div class="lg:col-span-2 bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-700">
         <h2 class="text-3xl font-bold mb-6 text-white">Checkout</h2>
 
         <!-- Billing Info -->
-        <h3 class="text-lg font-semibold mb-3 text-white">Billing Information</h3>
+        <h3 class="text-lg font-semibold mb-3 text-indigo-400">Billing Information</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <input v-model="billing.fullName" type="text" placeholder="Full Name *" class="checkout-input" />
           <input v-model="billing.email" type="email" placeholder="Email *" class="checkout-input" />
-          <input v-model="billing.phone" type="text" placeholder="Phone Number" class="checkout-input" />
+          <input v-model="billing.phone" type="text" placeholder="Phone Number *" class="checkout-input" />
           <input v-model="billing.address" type="text" placeholder="Address *" class="checkout-input" />
           <input v-model="billing.city" type="text" placeholder="City" class="checkout-input" />
         </div>
       </div>
 
       <!-- Right: Cart Summary -->
-      <div class="bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-800">
+      <div class="bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-700">
         <h3 class="text-xl font-bold mb-6 text-white">Order Summary</h3>
 
-        <div v-if="loading" class="text-center py-8 text-gray-500">Loading cart...</div>
-        <div v-else-if="cart.length === 0" class="text-center py-8 text-gray-500">Your cart is empty.</div>
+        <!-- Loading / Empty states -->
+        <div v-if="loading" class="text-center py-8 text-gray-400">Loading cart...</div>
+        <div v-else-if="cart.length === 0" class="text-center py-8 text-gray-400">Your cart is empty.</div>
 
-        <div v-else class="space-y-4">
+        <!-- Cart Items -->
+        <div v-else class="space-y-4 animate-fadeIn">
           <div
             v-for="item in cart"
             :key="item.id"
-            class="flex justify-between items-center border-b pb-3"
+            class="flex justify-between items-center bg-gray-700 p-3 rounded-lg shadow hover:shadow-md transition"
           >
             <div>
-              <p class="font-semibold text-gray-400">{{ item.title }}</p>
+              <p class="font-semibold text-white">{{ item.title }}</p>
+              <p class="text-sm text-gray-400">Qty: {{ item.quantity }}</p>
             </div>
-            <p class="font-bold text-gray-400">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
+            <p class="font-bold text-indigo-400">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
           </div>
         </div>
 
         <!-- Totals -->
-        <div v-if="cart.length > 0" class="mt-6 border-t pt-4 space-y-2">
+        <div v-if="cart.length > 0" class="mt-6 border-t border-gray-600 pt-4 space-y-2">
           <div class="flex justify-between">
             <span class="text-gray-400">Subtotal</span>
-            <span class="text-gray-400">Rs {{ subtotal.toFixed(2) }}</span>
+            <span class="text-gray-300">Rs {{ subtotal.toFixed(2) }}</span>
           </div>
           <div class="flex justify-between font-bold text-lg">
-            <span class="text-gray-400">Total</span>
-            <span class="text-gray-400">Rs {{ total.toFixed(2) }}</span>
+            <span class="text-white">Total</span>
+            <span class="text-indigo-400">Rs {{ total.toFixed(2) }}</span>
           </div>
         </div>
 
@@ -63,7 +66,7 @@
           <p v-if="errorMessage" class="mt-4 text-red-500 text-center">{{ errorMessage }}</p>
         </transition>
         <transition name="fade">
-          <p v-if="successMessage" class="mt-4 text-green-600 text-center">{{ successMessage }}</p>
+          <p v-if="successMessage" class="mt-4 text-green-500 text-center">{{ successMessage }}</p>
         </transition>
       </div>
     </div>
@@ -135,7 +138,6 @@ const subtotal = computed(() =>
   cart.value.reduce((acc, item) => acc + item.price * item.quantity, 0)
 );
 
-// ✅ Removed tax, total = subtotal
 const total = computed(() => subtotal.value);
 
 const placeOrder = async () => {
@@ -180,7 +182,7 @@ const placeOrder = async () => {
 
 <style scoped>
 .checkout-input {
-  @apply w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-700 border-gray-700 text-white placeholder-gray-400;
+  @apply w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-700 border-gray-600 text-white placeholder-gray-400;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;

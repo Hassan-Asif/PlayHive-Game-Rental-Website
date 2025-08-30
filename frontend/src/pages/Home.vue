@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-900 text-white overflow-x-hidden">
+  <div class="min-h-screen bg-[#0f172a] text-[#f1f5f9] overflow-x-hidden">
     
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-purple-800 to-indigo-900 py-32">
+    <section class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32">
       <div class="container mx-auto px-6 text-center">
-        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInDown">
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInDown text-[#6366f1]">
           Rent the Best Games Instantly
         </h1>
-        <p class="text-lg md:text-xl text-gray-300 mb-8 animate-fadeIn">
+        <p class="text-lg md:text-xl text-[#94a3b8] mb-8 animate-fadeIn">
           From GTA to FIFA, experience gaming without buying.
         </p>
         <router-link 
           to="/games" 
-          class="bg-indigo-500 hover:bg-indigo-600 transition-transform transform hover:scale-105 px-8 py-3 rounded-lg text-lg font-semibold animate-bounce"
+          class="bg-[#6366f1] hover:bg-[#06b6d4] transition-transform transform hover:scale-105 px-8 py-3 rounded-lg text-lg font-semibold animate-bounce shadow-lg"
         >
           Browse More Games
         </router-link>
@@ -20,60 +20,76 @@
     </section>
 
     <!-- Featured Games Section -->
-    <section class="py-20">
-      <h2 class="text-3xl font-bold text-center mb-12 animate-fadeInUp">Featured Games</h2>
+    <section class="py-16 container mx-auto px-6">
+      <h2 class="text-3xl font-extrabold text-white mb-10 text-center">Featured Games</h2>
 
-      <!-- Mobile: horizontal scroll / Desktop: grid -->
+      <!-- Mobile scroll, Desktop grid -->
       <div 
-        class="flex gap-6 px-6 overflow-x-auto snap-x snap-mandatory
-               sm:grid sm:gap-8 sm:overflow-visible sm:snap-none
-               sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        v-if="games.length"
+        class="flex gap-6 overflow-x-auto snap-x snap-mandatory
+               sm:grid sm:gap-8 sm:overflow-visible sm:snap-none 
+               sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
         <div
           v-for="game in featuredGames"
           :key="game.id"
-          class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-500 min-w-[250px] sm:min-w-0 snap-center"
+          class="group bg-gray-900 border border-gray-800 rounded-2xl shadow-lg 
+                 overflow-hidden hover:shadow-indigo-600/20 transition-transform duration-500 
+                 transform hover:scale-[1.03] min-w-[250px] snap-center sm:min-w-0"
         >
-          <img :src="game.image" :alt="game.title" class="w-full h-40 object-cover"/>
-          <div class="p-4">
-            <h3 class="text-lg font-semibold">{{ game.title }}</h3>
-            <p class="text-gray-400 mt-1">{{ game.genre || 'Action' }}</p>
-            <!-- Direct Rent Button -->
-            <router-link :to="`/rent/${game.id}`">
-              <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full">
+          <!-- Game Image -->
+          <div class="relative h-48">
+            <img :src="game.image" :alt="game.title" 
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
+          </div>
+
+          <!-- Game Info -->
+          <div class="p-5 flex flex-col gap-3">
+            <h3 class="text-lg font-bold text-white truncate">{{ game.title }}</h3>
+            <p class="text-gray-400 text-sm line-clamp-2">{{ game.description }}</p>
+
+            <div class="mt-4">
+              <button
+                @click="goToRent(game.id)"
+                class="w-full bg-indigo-600/90 hover:bg-indigo-700 text-white px-4 py-2 
+                       rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-600/30"
+              >
                 Rent Now
               </button>
-            </router-link>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="text-center text-gray-400 py-20">
+        <p class="text-xl">No games available yet. Please check back later!</p>
       </div>
     </section>
 
     <!-- How It Works Section -->
-    <section class="py-20 bg-gray-800" id="how-it-works">
-      <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+<section id="how-it-works" class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32">
+  <h2 class="text-3xl font-bold text-center mb-12 text-[#6366f1]">How It Works</h2>
 
-      <!-- Mobile: horizontal scroll / Desktop: grid -->
-      <div 
-        class="flex gap-6 px-6 overflow-x-auto snap-x snap-mandatory
-               md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:snap-none
-               max-w-6xl mx-auto text-center">
-        
-        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500 min-w-[250px] md:min-w-0 snap-center">
-          <h3 class="text-xl font-semibold mb-2">Choose Your Game</h3>
-          <p class="text-gray-300">Browse our wide collection and pick your favorite.</p>
-        </div>
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 text-center">
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-indigo-600/30 transition-transform duration-500">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-400">Choose Your Game</h3>
+      <p class="text-gray-300">Browse our wide collection and pick your favorite.</p>
+    </div>
 
-        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500 min-w-[250px] md:min-w-0 snap-center">
-          <h3 class="text-xl font-semibold mb-2">Rent Online</h3>
-          <p class="text-gray-300">Pay online and get instant access to the game.</p>
-        </div>
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-indigo-600/30 transition-transform duration-500">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-400">Rent Online</h3>
+      <p class="text-gray-300">Pay online and get instant access to the game.</p>
+    </div>
 
-        <div class="bg-gray-700 rounded-xl p-6 hover:scale-105 transition-transform duration-500 min-w-[250px] md:min-w-0 snap-center">
-          <h3 class="text-xl font-semibold mb-2">Play & Enjoy</h3>
-          <p class="text-gray-300">Download or play online and enjoy your gaming session.</p>
-        </div>
-      </div>
-    </section>
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-indigo-600/30 transition-transform duration-500">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-400">Play & Enjoy</h3>
+      <p class="text-gray-300">Download or play online and enjoy your gaming session.</p>
+    </div>
+  </div>
+</section>
+
     
   </div>
 </template>
@@ -90,9 +106,14 @@ export default {
     };
   },
   computed: {
-    // Only show the first 4 games for Featured section
+    // Only show first 4 games in Featured section
     featuredGames() {
       return this.games.slice(0, 4);
+    },
+  },
+  methods: {
+    goToRent(gameId) {
+      this.$router.push(`/rent/${gameId}`);
     },
   },
   async mounted() {
@@ -119,4 +140,8 @@ export default {
 .animate-fadeInDown { animation: fadeInDown 1s ease forwards; }
 .animate-fadeInUp { animation: fadeInUp 1s ease forwards; }
 .animate-fadeIn { animation: fadeIn 1.2s ease forwards; }
+
+html {
+  scroll-behavior: smooth;
+}
 </style>

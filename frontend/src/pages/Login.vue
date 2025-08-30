@@ -7,14 +7,17 @@ const email = ref("");
 const password = ref("");
 const router = useRouter();
 const error = ref("");
+const loading = ref(false);
 
 // Firebase login function
 const handleLogin = async () => {
   const auth = getAuth();
   error.value = "";
+  loading.value = true;
 
   if (!email.value || !password.value) {
-    error.value = "Please enter both email and password!";
+    error.value = "⚠️ Please enter both email and password!";
+    loading.value = false;
     return;
   }
 
@@ -23,10 +26,10 @@ const handleLogin = async () => {
     const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
     const user = userCredential.user;
 
-    // Get Firebase token (optional, can be used for backend verification)
+    // Get Firebase token (optional, for backend verification)
     const token = await user.getIdToken();
 
-    // Save user info in localStorage (or use Vuex/Pinia for state management)
+    // Save user info locally
     localStorage.setItem("user", JSON.stringify({
       uid: user.uid,
       email: user.email,
@@ -34,61 +37,73 @@ const handleLogin = async () => {
       token,
     }));
 
-    // Redirect to home or cart page
+    // Redirect
     router.push("/");
   } catch (err) {
     console.error(err);
+
     // Map Firebase error codes to friendly messages
     if (err.code === "auth/user-not-found") {
-      error.value = "User not found. Please register first.";
+      error.value = "❌ User not found. Please register first.";
     } else if (err.code === "auth/wrong-password") {
-      error.value = "Incorrect password.";
+      error.value = "❌ Incorrect password.";
     } else if (err.code === "auth/invalid-email") {
-      error.value = "Invalid email address.";
+      error.value = "⚠️ Invalid email address.";
     } else {
-      error.value = err.message || "Login failed. Try again.";
+      error.value = "⚠️ Login failed. Try again.";
     }
+  } finally {
+    loading.value = false;
   }
 };
 </script>
 
 <template>
-  <div class="flex justify-center items-center min-h-screen  bg-gray-700">
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-96">
-      <h2 class="text-2xl font-bold mb-4 text-center text-white">Login</h2>
+  <div class="flex justify-center items-center min-h-screen bg-gray-900">
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-lg w-96 border border-gray-700">
+      <!-- Title -->
+      <h2 class="text-3xl font-extrabold mb-6 text-center text-indigo-400">
+        Welcome Back 🎮
+      </h2>
 
-      <label class="block mb-2 font-medium text-white">Email</label>
+      <!-- Email -->
+      <label class="block mb-2 font-medium text-gray-300">Email</label>
       <input 
         v-model="email" 
         type="email" 
-        placeholder="Email" 
-        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700 text-white" 
+        placeholder="Enter your email" 
+        class="w-full p-3 border rounded-lg mb-4 bg-gray-700 border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" 
       />
 
-      <label class="block mb-2 font-medium text-white">Password</label>
+      <!-- Password -->
+      <label class="block mb-2 font-medium text-gray-300">Password</label>
       <input 
         v-model="password" 
         type="password" 
-        placeholder="Password" 
-        class="w-full p-2 border rounded mb-4 bg-gray-700 border-gray-700 text-white" 
+        placeholder="Enter your password" 
+        class="w-full p-3 border rounded-lg mb-4 bg-gray-700 border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" 
       />
 
+      <!-- Register link -->
       <p class="text-sm text-gray-400 mb-4">
         Don’t have an account? 
-        <router-link to="/register" class="text-indigo-600 hover:underline">
+        <router-link to="/register" class="text-indigo-500 hover:underline">
           Register
         </router-link>
       </p>
 
+      <!-- Login Button -->
       <button 
         @click="handleLogin" 
-        class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition transform hover:scale-105 shadow-md"
+        :disabled="loading"
+        class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition transform hover:scale-105 shadow-md disabled:opacity-50"
       >
-        Login
+        <span v-if="loading">🔄 Logging in...</span>
+        <span v-else>🚀 Login</span>
       </button>
 
-      <p v-if="error" class="text-red-500 mt-2 text-center">{{ error }}</p>
+      <!-- Error Message -->
+      <p v-if="error" class="text-red-500 mt-4 text-center font-medium">{{ error }}</p>
     </div>
   </div>
 </template>
-
