@@ -1,48 +1,53 @@
 <template>
-  <div class="min-h-screen bg-gray-900 pt-20 py-12 px-6">
-    <div v-if="game" class="max-w-5xl mx-auto bg-gray-800 shadow-xl rounded-2xl overflow-hidden border border-gray-700">
-      
+  <div class="min-h-screen bg-gray-900 pt-24 px-6">
+    <div 
+      v-if="game" 
+      class="max-w-6xl mx-auto bg-gray-800/90 backdrop-blur-md shadow-2xl rounded-3xl overflow-hidden border border-gray-700"
+    >
       <!-- Game Section -->
       <div class="flex flex-col md:flex-row">
-        
         <!-- Game Image -->
         <div 
-          class="bg-gray-900 flex justify-center items-center w-full md:w-1/2 
-                 h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden 
-                 rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none"
+          class="relative flex justify-center items-center w-full md:w-2/5 
+                 h-[220px] sm:h-[300px] md:h-[340px] lg:h-[380px] overflow-hidden"
         >
           <img 
             :src="game.image" 
             :alt="game.title" 
             class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
           />
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/30 to-transparent"></div>         
         </div>
 
         <!-- Game Details -->
-        <div class="p-8 w-full md:w-1/2 bg-gray-900 flex flex-col justify-center">
-          <h1 class="text-3xl font-bold mb-4 text-indigo-400">{{ game.title }}</h1>
-          <p class="text-gray-300 leading-relaxed">{{ game.description }}</p>
+        <div class="p-10 w-full md:w-3/5 flex flex-col justify-start">
+          <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-400 leading-snug">
+            {{ game.title }}
+          </h1>
+          <p class="text-gray-300 leading-relaxed text-base md:text-lg mt-4">
+            {{ game.description }}
+          </p>
         </div>
       </div>
 
       <!-- Rental Plan Section -->
-      <div class="p-8 bg-gray-900 rounded-b-2xl">
-        <h2 class="text-2xl font-bold mb-6 text-indigo-400">Choose Your Rental Plan</h2>
+      <div class="p-10 bg-gray-900 rounded-b-3xl border-t border-gray-700">
+        <h2 class="text-2xl md:text-3xl font-bold mb-8 text-indigo-400">🎮 Choose Your Rental Plan</h2>
 
-        <!-- Mobile: scroll | Desktop: grid -->
+        <!-- Plans -->
         <div 
-          class="flex gap-6 overflow-x-auto snap-x snap-mandatory
-                 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:snap-none"
+          class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4
+                 md:grid md:grid-cols-2 md:gap-8 md:overflow-visible md:snap-none"
         >
           <!-- Daily Plan -->
           <div 
             @click="selectPlan('daily')" 
             :class="planClass('daily')" 
-            class="cursor-pointer p-6 rounded-xl border bg-gray-800 hover:shadow-lg hover:shadow-indigo-500/20 transition min-w-[250px] snap-center md:min-w-0"
+            class="cursor-pointer p-6 rounded-2xl border bg-gray-800 hover:shadow-xl hover:shadow-indigo-500/30 transition min-w-[260px] snap-center md:min-w-0"
           >
             <h3 class="text-xl font-semibold text-white">Daily Plan</h3>
-            <p class="text-gray-400 mt-2">Rent this game for 1 full day.</p>
-            <p class="text-indigo-400 font-bold mt-4">
+            <p class="text-gray-400 mt-2">Perfect for short sessions or trying out a game.</p>
+            <p class="text-indigo-400 font-bold mt-4 text-lg">
               Rs {{ game.dailyPrice }} / day
             </p>
           </div>
@@ -51,37 +56,40 @@
           <div 
             @click="selectPlan('weekly')" 
             :class="planClass('weekly')" 
-            class="cursor-pointer p-6 rounded-xl border bg-gray-800 hover:shadow-lg hover:shadow-indigo-500/20 transition min-w-[250px] snap-center md:min-w-0"
+            class="cursor-pointer p-6 rounded-2xl border bg-gray-800 hover:shadow-xl hover:shadow-indigo-500/30 transition min-w-[260px] snap-center md:min-w-0"
           >
             <h3 class="text-xl font-semibold text-white">Weekly Plan</h3>
-            <p class="text-gray-400 mt-2">Rent this game for 7 days.</p>
-            <p class="text-indigo-400 font-bold mt-4">
+            <p class="text-gray-400 mt-2">Great value if you want to dive deeper.</p>
+            <p class="text-indigo-400 font-bold mt-4 text-lg">
               Rs {{ game.weeklyPrice }} / week
             </p>
           </div>
         </div>
 
         <!-- Selected Plan Summary -->
-        <div v-if="selectedPlan" class="mt-10 p-6 bg-gray-800 rounded-xl border border-gray-700">
-          <h3 class="text-lg font-semibold text-white">You selected:</h3>
-          <p class="mt-2 text-gray-300">
-            <span class="capitalize">{{ selectedPlan }}</span>
-            &nbsp;
-            <span class="text-indigo-400 font-bold">Rs {{ calculatePrice }}</span>
+        <div 
+          v-if="selectedPlan" 
+          class="mt-10 p-6 bg-gray-800/90 backdrop-blur-md rounded-2xl border border-gray-700"
+        >
+          <h3 class="text-lg font-semibold text-white">✅ You selected:</h3>
+          <p class="mt-3 text-gray-300">
+            <span class="capitalize font-medium">{{ selectedPlan }}</span>
+            &nbsp; → 
+            <span class="text-indigo-400 font-bold text-lg">Rs {{ calculatePrice }}</span>
           </p>
           <button 
             @click="confirmOrder" 
-            class="mt-6 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition">
+            class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-semibold transition-all hover:shadow-lg hover:shadow-indigo-500/30"
+          >
             Confirm Rental
           </button>
-          
         </div>
       </div>
     </div>
 
     <!-- Game not found -->
-    <div v-else class="text-center text-gray-400 text-xl font-semibold mt-12">
-      Game not found!
+    <div v-else class="text-center text-gray-500 text-xl font-semibold mt-12">
+      ⚠️ Game not found!
     </div>
   </div>
 </template>

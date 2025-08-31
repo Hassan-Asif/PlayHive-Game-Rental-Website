@@ -34,7 +34,6 @@
           >
             <div>
               <p class="font-semibold text-white">{{ item.title }}</p>
-              <p class="text-sm text-gray-400">Qty: {{ item.quantity }}</p>
             </div>
             <p class="font-bold text-indigo-400">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
           </div>

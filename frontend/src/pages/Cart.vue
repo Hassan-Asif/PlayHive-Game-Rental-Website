@@ -1,77 +1,84 @@
 <template>
-  <div class="min-h-screen bg-gray-900 pt-20 px-6 md:px-12"> 
-    <h1 class="text-4xl font-extrabold mb-10 text-center bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent animate-fadeInDown">
+  <div class="min-h-screen bg-gray-900 pt-20 px-4 sm:px-6 md:px-12"> 
+    <h1 class="text-3xl sm:text-4xl font-extrabold mb-8 sm:mb-10 text-center bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent animate-fadeInDown">
       Your Cart
     </h1>
 
     <!-- Loading State -->
-    <div v-if="loading" class="text-center py-32 text-gray-300">
+    <div v-if="loading" class="text-center py-20 sm:py-32 text-gray-300">
       Loading your cart...
     </div>
 
     <!-- Empty Cart -->
-    <div v-else-if="cartItems.length === 0" class="text-center py-32">
-      <p class="text-gray-300 text-xl mb-6">Your cart is empty.</p>
+    <div v-else-if="cartItems.length === 0" class="text-center py-20 sm:py-32">
+      <p class="text-gray-300 text-lg sm:text-xl mb-6">Your cart is empty.</p>
       <router-link
         to="/games"
-        class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl shadow-lg transition transform hover:scale-105"
+        class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-5 sm:px-6 py-3 rounded-xl shadow-lg transition transform hover:scale-105 text-sm sm:text-base"
       >
         Browse Games
       </router-link>
     </div>
 
     <!-- Cart Items -->
-    <div v-else class="grid md:grid-cols-3 gap-10">
-      <!-- Items List -->
-      <div class="md:col-span-2 space-y-6">
-        <div
-          v-for="item in cartItems"
-          :key="item.id"
-          class="bg-gray-800 p-5 rounded-2xl shadow-lg flex items-center gap-6 hover:shadow-2xl transition-all animate-fadeIn"
-        >
-          <!-- Game Image -->
-          <img :src="item.image" :alt="item.title" class="w-28 h-28 object-cover rounded-xl shadow" />
+<div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
+  <!-- Items List -->
+  <div class="lg:col-span-2 space-y-4 sm:space-y-5">
+    <div
+      v-for="item in cartItems"
+      :key="item.id"
+      class="bg-gray-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-lg flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-5 hover:shadow-2xl transition-all animate-fadeIn"
+    >
+      <!-- Game Image (smaller now) -->
+      <img 
+        :src="item.image" 
+        :alt="item.title" 
+        class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow" 
+      />
 
-          <!-- Game Info -->
-          <div class="flex-1">
-            <h2 class="font-semibold text-xl text-white">{{ item.title }}</h2>
-            <p class="text-gray-400 text-sm mt-1">
-              Rental Plan: <span class="text-indigo-400 font-medium">{{ item.rentalPlan }}</span>
-            </p>
-            <p class="text-indigo-500 font-bold mt-2">Rs {{ item.price.toFixed(2) }}</p>
-
-            
-          </div>
-
-          <!-- Remove -->
-          <div class="text-right">
-            <button
-              @click="removeItem(item.id)"
-              class="text-red-500 hover:text-red-600 transition text-sm font-medium"
-            >
-              Remove
-            </button>
-          </div>
-        </div>
+      <!-- Game Info (text a bit smaller) -->
+      <div class="flex-1 text-center sm:text-left">
+        <h2 class="font-semibold text-base sm:text-lg text-white leading-tight">
+          {{ item.title }}
+        </h2>
+        <p class="text-gray-400 text-xs sm:text-sm mt-1">
+          Rental Plan: <span class="text-indigo-400 font-medium">{{ item.rentalPlan }}</span>
+        </p>
+        <p class="text-indigo-500 font-semibold text-sm sm:text-base mt-2">
+          Rs {{ item.price.toFixed(2) }}
+        </p>
       </div>
 
+      <!-- Remove Button -->
+      <div class="sm:text-right">
+        <button
+          @click="removeItem(item.id)"
+          class="text-red-500 hover:text-red-600 transition text-xs sm:text-sm font-medium"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
+
+
       <!-- Order Summary -->
-      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg animate-fadeIn">
-        <h2 class="text-2xl font-bold mb-6 text-white">Order Summary</h2>
+      <div class="bg-gray-800 p-5 sm:p-6 rounded-2xl shadow-lg animate-fadeIn h-fit">
+        <h2 class="text-xl sm:text-2xl font-bold mb-5 sm:mb-6 text-white">Order Summary</h2>
 
         <div class="flex justify-between mb-3">
           <span class="text-gray-400">Subtotal</span>
           <span class="text-gray-200">Rs {{ subtotal.toFixed(2) }}</span>
         </div>
 
-        <div class="flex justify-between text-lg font-semibold border-t border-gray-700 pt-3 mb-6">
+        <div class="flex justify-between text-base sm:text-lg font-semibold border-t border-gray-700 pt-3 mb-5 sm:mb-6">
           <span class="text-gray-300">Total</span>
           <span class="text-indigo-400">Rs {{ subtotal.toFixed(2) }}</span>
         </div>
 
         <button
           @click="goToCheckout"
-          class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 rounded-xl shadow-md transition transform hover:scale-105 disabled:opacity-50"
+          class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2.5 sm:py-3 rounded-xl shadow-md transition transform hover:scale-105 disabled:opacity-50 text-sm sm:text-base"
           :disabled="cartItems.length === 0"
         >
           Proceed to Checkout
@@ -80,6 +87,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { db, auth } from "../firebase";
