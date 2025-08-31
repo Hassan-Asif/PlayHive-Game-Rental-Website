@@ -34,14 +34,25 @@
 
       <!-- Right side (cart + logout) -->
       <div class="hidden md:flex items-center gap-3">
-        <!-- Cart -->
-        <router-link to="/cart" 
-          class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm text-lg text-cyan-400"
+        <!-- Cart (always visible) -->
+        <router-link 
+          to="/cart" 
+          class="relative p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm text-lg text-cyan-400"
         >
           🛒
+          <span 
+            v-if="cartCount > 0"
+            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full shadow"
+          >
+            {{ cartCount }}
+          </span>
         </router-link>
 
-        
+        <!-- Logout -->
+        <button v-if="user" @click="logout" 
+          class="p-2 rounded-lg bg-red-600/70 hover:bg-red-700/80 text-white text-sm transition shadow-md">
+          Logout
+        </button>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -69,8 +80,19 @@
         <!-- Admin link (mobile) -->
         <router-link v-if="user && user.email === 'onlyadmin@gmail.com'" to="/admin" class="hover:text-cyan-400 transition">Admin</router-link>
 
-        <!-- Cart -->
-        <router-link v-if="user" to="/cart" class="hover:text-cyan-400 text-lg">🛒</router-link>
+        <!-- Cart (always visible on mobile too) -->
+        <router-link 
+          to="/cart" 
+          class="relative hover:text-cyan-400 text-lg"
+        >
+          🛒
+          <span 
+            v-if="cartCount > 0"
+            class="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full shadow"
+          >
+            {{ cartCount }}
+          </span>
+        </router-link>
 
         <!-- Logout -->
         <button v-if="user" @click="logout" 
@@ -93,7 +115,13 @@ export default {
     return {
       menuOpen: false,
       user: null,
+      cartItems: []
     };
+  },
+  computed: {
+    cartCount() {
+      return this.cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+    }
   },
   created() {
     const auth = getAuth();
@@ -104,10 +132,19 @@ export default {
     this.$router.afterEach(() => {
       this.menuOpen = false;
     });
+
+    this.loadCart();
+    window.addEventListener("storage", this.loadCart);
+  },
+  beforeUnmount() {
+    window.removeEventListener("storage", this.loadCart);
   },
   methods: {
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
+    },
+    loadCart() {
+      this.cartItems = JSON.parse(localStorage.getItem("guestCart") || "[]");
     },
     logout() {
       const auth = getAuth();
