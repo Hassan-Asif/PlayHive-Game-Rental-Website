@@ -47,23 +47,6 @@
             <p class="text-indigo-500 font-semibold text-xs sm:text-sm">
               Rs {{ (item.price * (item.quantity || 1)).toFixed(2) }}
             </p>
-
-            <!-- Quantity Controls -->
-            <div class="flex items-center gap-2 mt-2">
-              <button 
-                @click="decreaseQty(item)" 
-                class="px-2 py-1 bg-gray-700 rounded text-white text-xs hover:bg-gray-600"
-              >
-                -
-              </button>
-              <span class="text-white text-xs">{{ item.quantity || 1 }}</span>
-              <button 
-                @click="increaseQty(item)" 
-                class="px-2 py-1 bg-gray-700 rounded text-white text-xs hover:bg-gray-600"
-              >
-                +
-              </button>
-            </div>
           </div>
 
           <!-- Remove -->
@@ -92,8 +75,7 @@
 
         <button
           @click="goToCheckout"
-          class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2.5 sm:py-3 rounded-xl shadow-md transition transform hover:scale-105 disabled:opacity-50 text-sm sm:text-base"
-          :disabled="cartItems.length === 0"
+          class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2.5 sm:py-3 rounded-xl shadow-md transition transform hover:scale-105 text-sm sm:text-base"
         >
           Proceed to Checkout
         </button>
@@ -125,29 +107,15 @@ export default {
     },
   },
   methods: {
-    increaseQty(item) {
-      this.cartItems = this.cartItems.map((cartItem) =>
-        cartItem.id === item.id && cartItem.rentalPlan === item.rentalPlan
-          ? { ...cartItem, quantity: (cartItem.quantity || 1) + 1 }
-          : cartItem
-      );
-      localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
-    },
-    decreaseQty(item) {
-      if ((item.quantity || 1) <= 1) return;
-      this.cartItems = this.cartItems.map((cartItem) =>
-        cartItem.id === item.id && cartItem.rentalPlan === item.rentalPlan
-          ? { ...cartItem, quantity: cartItem.quantity - 1 }
-          : cartItem
-      );
-      localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
-    },
     removeItem(itemToRemove) {
-      this.cartItems = this.cartItems.filter(
+      const index = this.cartItems.findIndex(
         (item) =>
-          !(item.id === itemToRemove.id && item.rentalPlan === itemToRemove.rentalPlan)
+          item.id === itemToRemove.id && item.rentalPlan === itemToRemove.rentalPlan
       );
-      localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
+      if (index !== -1) {
+        this.cartItems.splice(index, 1); // remove just one
+        localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
+      }
     },
     goToCheckout() {
       this.$router.push("/checkout");
