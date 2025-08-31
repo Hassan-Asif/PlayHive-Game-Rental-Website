@@ -21,43 +21,41 @@
     </div>
 
     <!-- Cart Items -->
-<div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
+<div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10">
   <!-- Items List -->
   <div class="lg:col-span-2 space-y-4 sm:space-y-5">
     <div
       v-for="item in cartItems"
       :key="item.id"
-      class="bg-gray-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-lg flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-5 hover:shadow-2xl transition-all animate-fadeIn"
+      class="bg-gray-800 p-3 sm:p-4 rounded-xl shadow-lg flex flex-row items-center gap-3 sm:gap-5 hover:shadow-2xl transition-all animate-fadeIn"
     >
-      <!-- Game Image (smaller now) -->
+      <!-- Game Image (small for mobile) -->
       <img 
         :src="item.image" 
         :alt="item.title" 
-        class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow" 
+        class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shadow" 
       />
 
-      <!-- Game Info (text a bit smaller) -->
-      <div class="flex-1 text-center sm:text-left">
-        <h2 class="font-semibold text-base sm:text-lg text-white leading-tight">
+      <!-- Game Info -->
+      <div class="flex-1 min-w-0">
+        <h2 class="font-semibold text-sm sm:text-base text-white truncate">
           {{ item.title }}
         </h2>
-        <p class="text-gray-400 text-xs sm:text-sm mt-1">
-          Rental Plan: <span class="text-indigo-400 font-medium">{{ item.rentalPlan }}</span>
+        <p class="text-gray-400 text-xs sm:text-sm truncate">
+          Plan: <span class="text-indigo-400 font-medium">{{ item.rentalPlan }}</span>
         </p>
-        <p class="text-indigo-500 font-semibold text-sm sm:text-base mt-2">
+        <p class="text-indigo-500 font-semibold text-xs sm:text-sm">
           Rs {{ item.price.toFixed(2) }}
         </p>
       </div>
 
-      <!-- Remove Button -->
-      <div class="sm:text-right">
-        <button
-          @click="removeItem(item.id)"
-          class="text-red-500 hover:text-red-600 transition text-xs sm:text-sm font-medium"
-        >
-          Remove
-        </button>
-      </div>
+      <!-- Remove -->
+      <button
+        @click="removeItem(item.id)"
+        class="text-red-500 hover:text-red-600 transition text-xs sm:text-sm font-medium ml-2"
+      >
+        Remove
+      </button>
     </div>
   </div>
 

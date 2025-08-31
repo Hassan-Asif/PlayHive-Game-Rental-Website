@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-700 flex items-center justify-center px-4">
-    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8 pt-20">
       
       <!-- Left: Checkout Form -->
       <div class="lg:col-span-2 bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-700">
