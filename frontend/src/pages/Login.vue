@@ -84,13 +84,7 @@ const handleLogin = async () => {
         class="w-full p-3 border rounded-lg mb-4 bg-gray-700 border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" 
       />
 
-      <!-- Register link -->
-      <p class="text-sm text-gray-400 mb-4">
-        Don’t have an account? 
-        <router-link to="/register" class="text-indigo-500 hover:underline">
-          Register
-        </router-link>
-      </p>
+      
 
       <!-- Login Button -->
       <button 

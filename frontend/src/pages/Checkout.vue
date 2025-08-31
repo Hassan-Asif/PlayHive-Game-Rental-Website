@@ -9,10 +9,10 @@
         <!-- Billing Info -->
         <h3 class="text-lg font-semibold mb-3 text-indigo-400">Billing Information</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <input v-model="billing.fullName" type="text" placeholder="Full Name *" class="checkout-input" />
-          <input v-model="billing.email" type="email" placeholder="Email *" class="checkout-input" />
-          <input v-model="billing.phone" type="text" placeholder="Phone Number *" class="checkout-input" />
-          <input v-model="billing.address" type="text" placeholder="Address *" class="checkout-input" />
+          <input v-model="billing.fullName" type="text" placeholder="Full Name *" class="checkout-input" required />
+          <input v-model="billing.email" type="email" placeholder="Email" class="checkout-input" />
+          <input v-model="billing.phone" type="text" placeholder="Phone Number *" class="checkout-input" required />
+          <input v-model="billing.address" type="text" placeholder="Address" class="checkout-input" />
           <input v-model="billing.city" type="text" placeholder="City" class="checkout-input" />
         </div>
       </div>
@@ -35,7 +35,7 @@
             <div>
               <p class="font-semibold text-white">{{ item.title }}</p>
             </div>
-            <p class="font-bold text-indigo-400">Rs {{ (item.price * item.quantity).toFixed(2) }}</p>
+            <p class="font-bold text-indigo-400">Rs {{ (item.price * (item.quantity || 1)).toFixed(2) }}</p>
           </div>
         </div>
 
@@ -73,15 +73,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { auth, db } from "../firebase";
-import { collection, query, onSnapshot, doc, deleteDoc, addDoc } from "firebase/firestore";
+import { ref, computed, onMounted } from "vue";
+import { db } from "../firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useRouter } from "vue-router";
-import { onAuthStateChanged } from "firebase/auth";
 
 const router = useRouter();
 const cart = ref([]);
-const userId = ref(null);
 const loading = ref(true);
 const loadingOrder = ref(false);
 const errorMessage = ref("");
@@ -96,45 +94,14 @@ const billing = ref({
   postalCode: "",
 });
 
-let unsubscribeCart = null;
-let unsubscribeAuth = null;
-
 onMounted(() => {
-  unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-
-    userId.value = user.uid;
-
-    const cartRef = collection(db, "users", user.uid, "cart");
-    const q = query(cartRef);
-
-    unsubscribeCart = onSnapshot(
-      q,
-      (snapshot) => {
-        cart.value = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        loading.value = false;
-      },
-      (error) => {
-        console.error("Error fetching cart:", error);
-        loading.value = false;
-      }
-    );
-  });
-});
-
-onBeforeUnmount(() => {
-  if (unsubscribeCart) unsubscribeCart();
-  if (unsubscribeAuth) unsubscribeAuth();
+  const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+  cart.value = guestCart;
+  loading.value = false;
 });
 
 const subtotal = computed(() =>
-  cart.value.reduce((acc, item) => acc + item.price * item.quantity, 0)
+  cart.value.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0)
 );
 
 const total = computed(() => subtotal.value);
@@ -143,8 +110,9 @@ const placeOrder = async () => {
   errorMessage.value = "";
   successMessage.value = "";
 
-  if (!billing.value.fullName || !billing.value.email || !billing.value.address || !billing.value.phone) {
-    errorMessage.value = "⚠️ Please fill in all required billing fields (including phone number).";
+  // ✅ Only require Full Name and Phone
+  if (!billing.value.fullName || !billing.value.phone) {
+    errorMessage.value = "⚠️ Please fill in your full name and phone number.";
     return;
   }
 
@@ -152,21 +120,19 @@ const placeOrder = async () => {
 
   try {
     const orderData = {
-      userId: userId.value,
       items: cart.value,
       subtotal: subtotal.value,
       total: total.value,
       billing: billing.value,
-      createdAt: new Date(),
+      createdAt: serverTimestamp(),
       status: "Pending",
     };
 
-    await addDoc(collection(db, "users", userId.value, "orders"), orderData);
     await addDoc(collection(db, "orders"), orderData);
 
-    for (const item of cart.value) {
-      await deleteDoc(doc(db, "users", userId.value, "cart", item.id));
-    }
+    // Clear localStorage cart
+    localStorage.removeItem("guestCart");
+    cart.value = [];
 
     successMessage.value = "✅ Order placed successfully!";
     setTimeout(() => router.push("/checkoutmessage"), 2000);

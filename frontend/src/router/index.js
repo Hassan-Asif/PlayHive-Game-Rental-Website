@@ -5,7 +5,6 @@ import Cart from "../pages/Cart.vue";
 import Admin from "../pages/Admin.vue";
 import About from "../pages/About.vue";
 import Login from "../pages/Login.vue";
-import Register from "../pages/Register.vue";
 import GameRent from "../pages/GameRent.vue";
 import Games from "../pages/Games.vue";
 import Checkout from "../pages/Checkout.vue";
@@ -23,7 +22,6 @@ const routes = [
     meta: { requiresAdmin: true } // ✅ protected
   },
   { path: "/login", component: Login },
-  { path: "/register", component: Register },
   { path: "/rent/:id", component: GameRent },
   { path: "/games", component: Games },
   { path: "/checkout", component: Checkout },
