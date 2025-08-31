@@ -21,8 +21,8 @@
 
     <!-- Featured Games Section -->
 <section class="py-16 container mx-auto px-6">
-  <div class="flex items-center justify-between mb-10">
-    <h2 class="text-3xl font-extrabold text-white">Featured Games</h2>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 text-center sm:text-left">
+    <h2 class="text-3xl font-extrabold text-white mb-3 sm:mb-0">Featured Games</h2>
     <router-link 
       to="/games" 
       class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors duration-300 underline-offset-4 hover:underline"
@@ -73,6 +73,28 @@
   <!-- Empty State -->
   <div v-else class="text-center text-gray-400 py-20">
     <p class="text-xl">No games available yet. Please check back later!</p>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32">
+  <h2 class="text-3xl font-bold text-center mb-12 text-[#6366f1]">How It Works</h2>
+
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 text-center">
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-indigo-600/30 transition-transform duration-500">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-400">Choose Your Game</h3>
+      <p class="text-gray-300">Browse our wide collection and pick your favorite.</p>
+    </div>
+
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-indigo-600/30 transition-transform duration-500">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-400">Rent Online</h3>
+      <p class="text-gray-300">Pay online and get instant access to the game.</p>
+    </div>
+
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-indigo-600/30 transition-transform duration-500">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-400">Play & Enjoy</h3>
+      <p class="text-gray-300">Download or play online and enjoy your gaming session.</p>
+    </div>
   </div>
 </section>
 

@@ -26,7 +26,7 @@
       <div class="lg:col-span-2 space-y-4 sm:space-y-5">
         <div
           v-for="item in cartItems"
-          :key="item.id"
+          :key="item.id + '-' + item.rentalPlan"
           class="bg-gray-800 p-3 sm:p-4 rounded-xl shadow-lg flex flex-row items-center gap-3 sm:gap-5 hover:shadow-2xl transition-all animate-fadeIn"
         >
           <!-- Game Image -->
@@ -47,11 +47,28 @@
             <p class="text-indigo-500 font-semibold text-xs sm:text-sm">
               Rs {{ (item.price * (item.quantity || 1)).toFixed(2) }}
             </p>
+
+            <!-- Quantity Controls -->
+            <div class="flex items-center gap-2 mt-2">
+              <button 
+                @click="decreaseQty(item)" 
+                class="px-2 py-1 bg-gray-700 rounded text-white text-xs hover:bg-gray-600"
+              >
+                -
+              </button>
+              <span class="text-white text-xs">{{ item.quantity || 1 }}</span>
+              <button 
+                @click="increaseQty(item)" 
+                class="px-2 py-1 bg-gray-700 rounded text-white text-xs hover:bg-gray-600"
+              >
+                +
+              </button>
+            </div>
           </div>
 
           <!-- Remove -->
           <button
-            @click="removeItem(item.id)"
+            @click="removeItem(item)"
             class="text-red-500 hover:text-red-600 transition text-xs sm:text-sm font-medium ml-2"
           >
             Remove
@@ -95,7 +112,6 @@ export default {
     };
   },
   mounted() {
-    // Always load from localStorage
     const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
     this.cartItems = guestCart;
     this.loading = false;
@@ -111,7 +127,7 @@ export default {
   methods: {
     increaseQty(item) {
       this.cartItems = this.cartItems.map((cartItem) =>
-        cartItem.id === item.id
+        cartItem.id === item.id && cartItem.rentalPlan === item.rentalPlan
           ? { ...cartItem, quantity: (cartItem.quantity || 1) + 1 }
           : cartItem
       );
@@ -120,14 +136,17 @@ export default {
     decreaseQty(item) {
       if ((item.quantity || 1) <= 1) return;
       this.cartItems = this.cartItems.map((cartItem) =>
-        cartItem.id === item.id
+        cartItem.id === item.id && cartItem.rentalPlan === item.rentalPlan
           ? { ...cartItem, quantity: cartItem.quantity - 1 }
           : cartItem
       );
       localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
     },
-    removeItem(itemId) {
-      this.cartItems = this.cartItems.filter((item) => item.id !== itemId);
+    removeItem(itemToRemove) {
+      this.cartItems = this.cartItems.filter(
+        (item) =>
+          !(item.id === itemToRemove.id && item.rentalPlan === itemToRemove.rentalPlan)
+      );
       localStorage.setItem("guestCart", JSON.stringify(this.cartItems));
     },
     goToCheckout() {

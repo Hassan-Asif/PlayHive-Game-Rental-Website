@@ -35,25 +35,13 @@
       <!-- Right side (cart + logout) -->
       <div class="hidden md:flex items-center gap-3">
         <!-- Cart -->
-        <router-link v-if="user" to="/cart" 
+        <router-link to="/cart" 
           class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm text-lg text-cyan-400"
         >
           🛒
         </router-link>
 
-        <!-- Logout -->
-        <button 
-          v-if="user" 
-          @click="logout"
-          class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" 
-               class="h-6 w-6 text-indigo-400" 
-               fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
-          </svg>
-        </button>
+        
       </div>
 
       <!-- Mobile Menu Button -->
