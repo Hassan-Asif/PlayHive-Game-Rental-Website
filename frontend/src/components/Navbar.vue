@@ -86,21 +86,10 @@
           class="relative hover:text-cyan-400 text-lg"
         >
           🛒
-          <span 
-            v-if="cartCount > 0"
-            class="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full shadow"
-          >
-            {{ cartCount }}
-          </span>
+          
         </router-link>
 
-        <!-- Logout -->
-        <button v-if="user" @click="logout" 
-          class="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/60 transition-all hover:scale-105 shadow-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
-          </svg>
-        </button>
+        
       </ul>
     </transition>
   </header>
