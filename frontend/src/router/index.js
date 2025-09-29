@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+// 1. Import Firebase Auth
+import { getAuth } from "firebase/auth";
+
 import Home from "../pages/Home.vue";
 import GameDetails from "../pages/GameDetails.vue";
 import Cart from "../pages/Cart.vue";
@@ -10,6 +13,16 @@ import Games from "../pages/Games.vue";
 import Checkout from "../pages/Checkout.vue";
 import CheckoutMessage from "../pages/CheckoutMessage.vue";
 
+// Helper function to wait for Firebase Auth to initialize
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const removeListener = getAuth().onAuthStateChanged(user => {
+      removeListener();
+      resolve(user);
+    }, reject);
+  });
+};
+
 const routes = [
   { path: "/", component: Home },
   { path: "/game/:id", component: GameDetails },
@@ -19,7 +32,7 @@ const routes = [
   { 
     path: "/admin", 
     component: Admin, 
-    meta: { requiresAdmin: true } // ✅ protected
+    meta: { requiresAdmin: true } 
   },
   { path: "/login", component: Login },
   { path: "/rent/:id", component: GameRent },
@@ -36,7 +49,7 @@ const router = createRouter({
     } else if (to.hash) {
       return {
         el: to.hash,
-        behavior: "smooth", // ✅ smooth scroll to #id
+        behavior: "smooth",
       };
     } else {
       return { top: 0 };
@@ -44,23 +57,36 @@ const router = createRouter({
   },
 });
 
-// ✅ Route guard for admin
-router.beforeEach((to, from, next) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-
+// ✅ FIXED Route guard for admin
+router.beforeEach(async (to, from, next) => {
+  // Check if admin is required
   if (to.meta.requiresAdmin) {
-    // not logged in → redirect
-    if (!user) {
-      return next("/login");
-    }
+    try {
+      // Wait for the actual Firebase user object
+      const user = await getCurrentUser();
 
-    // only allow this one email
-    if (user.email !== "onlyadmin@gmail.com") {
-      return next("/");
+      // 1. Not logged in → redirect to login
+      if (!user) {
+        return next("/login");
+      }
+
+      // 2. Logged in, but not the admin → redirect to home
+      if (user.email !== "onlyadmin@gmail.com") {
+        return next("/");
+      }
+
+      // 3. Logged in AND is the admin → proceed
+      next();
+
+    } catch (error) {
+      // In case of a Firebase error, redirect to home or login
+      console.error("Auth check failed:", error);
+      next("/login");
     }
+  } else {
+    // No admin required → proceed
+    next();
   }
-
-  next();
 });
 
 export default router;
