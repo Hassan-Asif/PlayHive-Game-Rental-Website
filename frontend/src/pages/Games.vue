@@ -1,30 +1,42 @@
 <template>
-  <div class="min-h-screen bg-[#0f172a] text-[#f1f5f9] overflow-x-hidden">
+  <div class="min-h-screen bg-gray-950 text-white overflow-x-hidden">
     
-    <header class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32 border-b-4 border-cyan-600/50">
+    <div class="pt-24"></div> 
+
+    <header class="relative bg-gradient-to-r from-gray-800 to-gray-950 py-16 border-b-4 border-cyan-600/50">
       <div class="container mx-auto px-6 text-center">
         <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInDown text-cyan-500 drop-shadow-lg shadow-cyan-500/50">
           Explore All Games
         </h1>
-        <p class="text-lg md:text-xl text-[#94a3b8] mb-8 animate-fadeIn">
+        <p class="text-lg md:text-xl text-gray-400 mb-8 animate-fadeIn">
           Browse and rent your favorite titles instantly
         </p>
       </div>
     </header>
 
     <section class="py-16 container mx-auto px-6">
+      
+      <div v-if="loading" class="text-center py-32">
+        <svg class="animate-spin h-10 w-10 text-cyan-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-xl text-gray-400">Loading the library...</p>
+      </div>
+
       <div 
-        v-if="games.length" 
-        class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        v-else-if="games.length" 
+        
+        class="grid gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        
       >
-        <div
+        <router-link
           v-for="game in games"
           :key="game.id"
-          
+          :to="`/rent/${game.id}`"
           class="group bg-gray-950 border border-cyan-800 rounded-2xl shadow-xl 
                  overflow-hidden hover:shadow-cyan-500/30 transition-transform duration-500 
-                 transform hover:scale-[1.03]"
-          
+                 transform hover:scale-[1.03] cursor-pointer"
         >
           <div class="relative h-48">
             <img :src="game.image" :alt="game.title" 
@@ -38,17 +50,14 @@
 
             <div class="mt-4">
               <button
-                @click="goToRent(game.id)"
-                
                 class="w-full bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 
                        rounded-xl font-bold transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40 uppercase"
-                
               >
                 Rent Now
               </button>
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
 
       <div v-else class="text-center text-gray-400 py-20">
@@ -61,17 +70,19 @@
 
 <script>
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { app } from "../firebase"; // Assuming you export 'app' from firebase.js
 
 export default {
   name: "Games",
   data() {
     return {
       games: [],
+      loading: true, // New loading state
     };
   },
   async mounted() {
     try {
-      const db = getFirestore();
+      const db = getFirestore(app); // Use imported app for context
       const gamesCol = collection(db, "games");
       const gamesSnapshot = await getDocs(gamesCol);
       this.games = gamesSnapshot.docs.map(doc => ({
@@ -80,9 +91,14 @@ export default {
       }));
     } catch (error) {
       console.error("Error fetching games from Firebase:", error);
+      // Optional: Show an error message to the user here
+    } finally {
+      this.loading = false; // Stop loading regardless of outcome
     }
   },
   methods: {
+    // Changed to use router-link in the template for better accessibility and style
+    // Keeping this method just in case, but it's not strictly necessary with the router-link
     goToRent(gameId) {
       this.$router.push(`/rent/${gameId}`);
     },
@@ -98,8 +114,4 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* Include custom animations if needed, although they weren't in the original <style> block,
-   they were in the class list. I'll omit them here since they are not in the <style> block.
-*/
 </style>
