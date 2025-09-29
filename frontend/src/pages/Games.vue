@@ -36,7 +36,7 @@
                  overflow-hidden hover:shadow-cyan-500/30 transition-transform duration-500 
                  transform hover:scale-[1.03] cursor-pointer block"
         >
-          <div class="relative h-48">
+          <div class="relative w-full aspect-square">
             <img :src="game.image" :alt="game.title" 
                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1" />
             <div class="absolute inset-0 bg-gradient-to-t from-gray-950/70 to-transparent"></div>
@@ -68,7 +68,6 @@
 
 <script>
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-// import { app } from "../firebase"; <-- REMOVED the problematic import
 
 export default {
   name: "Games",
@@ -80,8 +79,7 @@ export default {
   },
   async mounted() {
     try {
-      // FIX: Initialize Firestore without explicitly passing 'app'.
-      // It will automatically use the default app initialized in firebase.js.
+      // Initialize Firestore without explicitly passing 'app'
       const db = getFirestore(); 
       
       const gamesCol = collection(db, "games");
@@ -98,3 +96,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Limit description to 2 lines */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
