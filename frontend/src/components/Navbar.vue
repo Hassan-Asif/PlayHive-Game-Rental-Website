@@ -42,12 +42,13 @@
           </span>
         </router-link>
 
-        <button v-if="user" @click="logout" 
-          class="px-4 py-2 rounded-lg bg-red-600/70 hover:bg-red-700/80 text-white font-semibold text-sm transition shadow-lg">
+        <button 
+          v-if="user && user.email === 'onlyadmin@gmail.com'" 
+          @click="logout" 
+          class="px-4 py-2 rounded-lg bg-red-600/70 hover:bg-red-700/80 text-white font-semibold text-sm transition shadow-lg"
+        >
           Logout
         </button>
-        
-
       </div>
 
       <button @click="toggleMenu" class="md:hidden p-2 rounded-full bg-gray-800/80 hover:bg-gray-700/80 transition-all shadow-sm text-cyan-400">
@@ -62,22 +63,35 @@
 
     <transition name="slide-fade">
       <ul v-if="menuOpen" 
-          @click="toggleMenu"
           class="md:hidden mt-2 rounded-xl border border-cyan-700/50 
                  bg-gray-900/95 backdrop-blur shadow-2xl flex flex-col gap-3 px-6 py-4 text-gray-300 font-medium text-lg">
         
-        <router-link to="/games" class="hover:text-cyan-400 transition py-1">Games</router-link>
-        <a href="#how-it-works" class="hover:text-cyan-400 transition py-1">How It Works</a>
-        <router-link to="/about" class="hover:text-cyan-400 transition py-1">About</router-link>
+        <router-link to="/games" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">Games</router-link>
+        <a href="#how-it-works" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">How It Works</a>
+        <router-link to="/about" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">About</router-link>
 
         <div class="border-t border-gray-700 my-2"></div>
         
-        <router-link v-if="user && user.email === 'onlyadmin@gmail.com'" to="/admin" class="hover:text-red-400 transition py-1">Admin Panel</router-link>
+        <router-link 
+          v-if="user && user.email === 'onlyadmin@gmail.com'" 
+          to="/admin" 
+          @click="toggleMenu" 
+          class="hover:text-red-400 transition py-1"
+        >
+          Admin Panel
+        </router-link>
 
-        <a v-else @click.stop="logout" class="text-red-400 hover:text-red-300 transition cursor-pointer py-1">Logout</a>
+        <a 
+          v-if="user && user.email === 'onlyadmin@gmail.com'" 
+          @click.stop="logout(); toggleMenu();" 
+          class="text-red-400 hover:text-red-300 transition cursor-pointer py-1"
+        >
+          Logout
+        </a>
         
         <router-link 
           to="/cart" 
+          @click="toggleMenu" 
           class="relative flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition py-1"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -113,7 +127,7 @@ export default {
       this.user = user;
     });
 
-    // 2. Close mobile menu on route change
+    // 2. Close mobile menu on route change (Good fallback for navigation)
     this.$router.afterEach(() => {
       this.menuOpen = false;
     });
