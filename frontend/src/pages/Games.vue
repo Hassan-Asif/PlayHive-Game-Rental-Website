@@ -26,7 +26,7 @@
 
       <div 
         v-else-if="games.length" 
-        class="grid gap-4 sm:gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        class="grid gap-3 sm:gap-6 lg:gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
         <router-link
           v-for="game in games"
@@ -42,15 +42,15 @@
             <div class="absolute inset-0 bg-gradient-to-t from-gray-950/70 to-transparent"></div>
           </div>
 
-          <div class="p-3 flex flex-col justify-between h-full">
+          <div class="p-2 lg:p-5 flex flex-col justify-between h-full">
             <div>
-              <h2 class="text-lg lg:text-xl font-extrabold text-white truncate group-hover:text-cyan-400 transition-colors">{{ game.title }}</h2>
-              <p class="text-gray-400 text-xs line-clamp-2 mt-1 mb-3">{{ game.description }}</p>
+              <h2 class="text-sm lg:text-xl font-extrabold text-white truncate group-hover:text-cyan-400 transition-colors">{{ game.title }}</h2>
+              <p class="hidden lg:block text-gray-400 text-sm line-clamp-2 mt-1 mb-4">{{ game.description }}</p>
             </div>
 
             <div 
-              class="w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 
-                     rounded-md text-sm font-bold transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40 uppercase"
+              class="w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-1 
+                     rounded-md text-xs lg:text-base font-bold transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40 uppercase mt-2 lg:mt-0"
             >
               Rent Now
             </div>
@@ -79,6 +79,7 @@ export default {
   },
   async mounted() {
     try {
+      // Initialize Firestore without explicitly passing 'app'
       const db = getFirestore(); 
       
       const gamesCol = collection(db, "games");
@@ -97,7 +98,7 @@ export default {
 </script>
 
 <style scoped>
-/* Limit description to 2 lines */
+/* Keeping line-clamp just in case, though description is hidden on mobile now */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
