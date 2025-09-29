@@ -26,13 +26,13 @@
 
       <div 
         v-else-if="games.length" 
-        class="grid gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        class="grid gap-4 sm:gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
         <router-link
           v-for="game in games"
           :key="game.id"
           :to="`/rent/${game.id}`"
-          class="group bg-gray-950 border border-cyan-800 rounded-2xl shadow-xl 
+          class="group bg-gray-950 border border-cyan-800 rounded-lg shadow-xl 
                  overflow-hidden hover:shadow-cyan-500/30 transition-transform duration-500 
                  transform hover:scale-[1.03] cursor-pointer block"
         >
@@ -42,15 +42,15 @@
             <div class="absolute inset-0 bg-gradient-to-t from-gray-950/70 to-transparent"></div>
           </div>
 
-          <div class="p-5 flex flex-col justify-between h-full">
+          <div class="p-3 flex flex-col justify-between h-full">
             <div>
-              <h2 class="text-xl font-extrabold text-white truncate group-hover:text-cyan-400 transition-colors">{{ game.title }}</h2>
-              <p class="text-gray-400 text-sm line-clamp-2 mt-1 mb-4">{{ game.description }}</p>
+              <h2 class="text-lg lg:text-xl font-extrabold text-white truncate group-hover:text-cyan-400 transition-colors">{{ game.title }}</h2>
+              <p class="text-gray-400 text-xs line-clamp-2 mt-1 mb-3">{{ game.description }}</p>
             </div>
 
             <div 
-              class="w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 
-                     rounded-xl font-bold transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40 uppercase"
+              class="w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 
+                     rounded-md text-sm font-bold transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40 uppercase"
             >
               Rent Now
             </div>
@@ -79,7 +79,6 @@ export default {
   },
   async mounted() {
     try {
-      // Initialize Firestore without explicitly passing 'app'
       const db = getFirestore(); 
       
       const gamesCol = collection(db, "games");
