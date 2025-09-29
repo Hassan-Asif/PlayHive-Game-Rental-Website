@@ -1,56 +1,60 @@
 <template>
   <div class="min-h-screen bg-[#0f172a] text-[#f1f5f9] overflow-x-hidden">
-    <!-- Header -->
-    <header class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32">
+    
+    <header class="relative bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-32 border-b-4 border-cyan-600/50">
       <div class="container mx-auto px-6 text-center">
-        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInDown text-[#6366f1]">Explore All Games</h1>
-        <p class="text-lg md:text-xl text-[#94a3b8] mb-8 animate-fadeIn">Browse and rent your favorite titles instantly</p>
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInDown text-cyan-500 drop-shadow-lg shadow-cyan-500/50">
+          Explore All Games
+        </h1>
+        <p class="text-lg md:text-xl text-[#94a3b8] mb-8 animate-fadeIn">
+          Browse and rent your favorite titles instantly
+        </p>
       </div>
     </header>
 
-    <!-- Games Section -->
-<section class="py-16 container mx-auto px-6">
-  <div 
-    v-if="games.length" 
-    class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-  >
-    <div
-      v-for="game in games"
-      :key="game.id"
-      class="group bg-gray-900 border border-gray-800 rounded-2xl shadow-lg 
-             overflow-hidden hover:shadow-indigo-600/20 transition-transform duration-500 
-             transform hover:scale-[1.03]"
-    >
-      <!-- Game Image -->
-      <div class="relative h-48">
-        <img :src="game.image" :alt="game.title" 
-             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
-      </div>
+    <section class="py-16 container mx-auto px-6">
+      <div 
+        v-if="games.length" 
+        class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
+        <div
+          v-for="game in games"
+          :key="game.id"
+          
+          class="group bg-gray-950 border border-cyan-800 rounded-2xl shadow-xl 
+                 overflow-hidden hover:shadow-cyan-500/30 transition-transform duration-500 
+                 transform hover:scale-[1.03]"
+          
+        >
+          <div class="relative h-48">
+            <img :src="game.image" :alt="game.title" 
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/70 to-transparent"></div>
+          </div>
 
-      <!-- Game Info -->
-      <div class="p-5 flex flex-col gap-3">
-        <h2 class="text-lg font-bold text-white truncate">{{ game.title }}</h2>
-        <p class="text-gray-400 text-sm line-clamp-2">{{ game.description }}</p>
+          <div class="p-5 flex flex-col gap-3">
+            <h2 class="text-xl font-extrabold text-white truncate group-hover:text-cyan-400 transition-colors">{{ game.title }}</h2>
+            <p class="text-gray-400 text-sm line-clamp-2">{{ game.description }}</p>
 
-        <div class="mt-4">
-          <button
-            @click="goToRent(game.id)"
-            class="w-full bg-indigo-600/90 hover:bg-indigo-700 text-white px-4 py-2 
-                   rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-600/30"
-          >
-            Rent Now
-          </button>
+            <div class="mt-4">
+              <button
+                @click="goToRent(game.id)"
+                
+                class="w-full bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 
+                       rounded-xl font-bold transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/40 uppercase"
+                
+              >
+                Rent Now
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Empty State -->
-  <div v-else class="text-center text-gray-400 py-20">
-    <p class="text-xl">No games available yet. Please check back later!</p>
-  </div>
-</section>
+      <div v-else class="text-center text-gray-400 py-20">
+        <p class="text-xl">No games available yet. Please check back later!</p>
+      </div>
+    </section>
 
   </div>
 </template>
@@ -94,4 +98,8 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Include custom animations if needed, although they weren't in the original <style> block,
+   they were in the class list. I'll omit them here since they are not in the <style> block.
+*/
 </style>
