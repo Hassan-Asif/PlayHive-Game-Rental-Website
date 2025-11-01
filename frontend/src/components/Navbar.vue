@@ -1,40 +1,72 @@
 <template>
-  <header class="fixed w-full z-50 px-3 sm:px-5 py-2">
+  <header
+    class="fixed w-full top-0 z-50 px-3 sm:px-5 py-2 backdrop-blur-md bg-gradient-to-r from-[#0a0a1a]/80 to-[#060618]/80 border-b border-cyan-700/40 shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+  >
     <div
-      class="rounded-xl sm:rounded-2xl border border-cyan-700/50 
-             bg-gray-900/95 backdrop-blur shadow-xl shadow-cyan-900/20
-             flex items-center justify-between gap-4 px-4 sm:px-6 py-3"
+      class="flex items-center justify-between gap-4 px-4 sm:px-6 py-3 
+             text-gray-200 font-medium"
     >
-      <router-link 
+      <!-- LOGO -->
+      <router-link
         to="/"
-        class="text-xl sm:text-2xl font-black tracking-wide 
-               text-cyan-400 drop-shadow-md cursor-pointer"
+        class="text-2xl sm:text-3xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition-transform duration-300"
       >
-        SankGaming
+        Sank<span class="text-cyan-500">Gaming</span>
       </router-link>
 
-      <nav class="hidden md:flex items-center gap-6 text-gray-300 font-medium">
-        <router-link to="/games" class="transition-all hover:text-cyan-400 hover:scale-[1.03]">Games</router-link>
-        <a href="#how-it-works" class="transition-all hover:text-cyan-400 hover:scale-[1.03]">How It Works</a>
-        <router-link to="/about" class="transition-all hover:text-cyan-400 hover:scale-[1.03]">About</router-link>
+      <!-- DESKTOP NAV -->
+      <nav
+        class="hidden md:flex items-center gap-8 text-gray-300 font-semibold text-sm uppercase tracking-wide"
+      >
+        <router-link
+          to="/games"
+          class="relative hover:text-cyan-400 transition-colors duration-300 group"
+        >
+          Games
+          <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-600 group-hover:w-full transition-all duration-300"
+          ></span>
+        </router-link>
 
-        <router-link 
-          v-if="user && user.email === 'onlyadmin@gmail.com'" 
-          to="/admin" 
-          class="transition-all text-red-400 font-bold hover:text-red-300 hover:scale-[1.03]"
+        <!-- HOW IT WORKS (Scroll to Home Section) -->
+        <button
+          @click="goToHowItWorks"
+          class="relative hover:text-cyan-400 transition-colors duration-300 group"
+        >
+          How It Works
+          <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-600 group-hover:w-full transition-all duration-300"
+          ></span>
+        </button>
+
+        <router-link
+          to="/about"
+          class="relative hover:text-cyan-400 transition-colors duration-300 group"
+        >
+          About
+          <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-600 group-hover:w-full transition-all duration-300"
+          ></span>
+        </router-link>
+
+        <router-link
+          v-if="user && user.email === 'onlyadmin@gmail.com'"
+          to="/admin"
+          class="text-red-400 hover:text-red-300 font-bold transition-all duration-300"
         >
           Admin Panel
         </router-link>
       </nav>
 
+      <!-- RIGHT ACTIONS -->
       <div class="hidden md:flex items-center gap-4">
-        
-        <router-link 
-          to="/cart" 
-          class="relative p-2 rounded-full bg-gray-800/80 hover:bg-gray-700/80 transition-all hover:scale-110 shadow-lg text-lg text-cyan-400"
+        <!-- CART -->
+        <router-link
+          to="/cart"
+          class="relative p-2 rounded-full bg-[#0b0b1a]/70 hover:bg-[#101028]/80 transition-all duration-300 hover:scale-110 text-cyan-400"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          <span 
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span
             v-if="cartCount > 0"
             class="absolute -top-1 -right-1 text-white text-xs font-bold px-1.5 py-0.5 rounded-full bg-red-600 shadow-md ring-2 ring-gray-900"
           >
@@ -42,60 +74,78 @@
           </span>
         </router-link>
 
-        <button 
-          v-if="user && user.email === 'onlyadmin@gmail.com'" 
-          @click="logout" 
-          class="px-4 py-2 rounded-lg bg-red-600/70 hover:bg-red-700/80 text-white font-semibold text-sm transition shadow-lg"
+        <!-- LOGOUT -->
+        <button
+          v-if="user && user.email === 'onlyadmin@gmail.com'"
+          @click="logout"
+          class="px-4 py-2 rounded-lg bg-red-600/70 hover:bg-red-700/80 text-white font-semibold text-xs uppercase tracking-wide transition-all shadow-md hover:shadow-lg hover:shadow-red-600/40"
         >
           Logout
         </button>
       </div>
 
-      <button @click="toggleMenu" class="md:hidden p-2 rounded-full bg-gray-800/80 hover:bg-gray-700/80 transition-all shadow-sm text-cyan-400">
-        <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
+      <!-- MOBILE MENU BUTTON -->
+      <button
+        @click="toggleMenu"
+        class="md:hidden p-2 rounded-full bg-[#0a0a1a]/80 hover:bg-[#12122a]/90 transition-all duration-300 text-cyan-400"
+      >
+        <i :class="menuOpen ? 'fas fa-times text-xl' : 'fas fa-bars text-xl'"></i>
       </button>
     </div>
 
+    <!-- MOBILE MENU -->
     <transition name="slide-fade">
-      <ul v-if="menuOpen" 
-          class="md:hidden mt-2 rounded-xl border border-cyan-700/50 
-                 bg-gray-900/95 backdrop-blur shadow-2xl flex flex-col gap-3 px-6 py-4 text-gray-300 font-medium text-lg">
-        
-        <router-link to="/games" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">Games</router-link>
-        <a href="#how-it-works" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">How It Works</a>
-        <router-link to="/about" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">About</router-link>
-
-        <div class="border-t border-gray-700 my-2"></div>
-        
-        <router-link 
-          v-if="user && user.email === 'onlyadmin@gmail.com'" 
-          to="/admin" 
-          @click="toggleMenu" 
-          class="hover:text-red-400 transition py-1"
-        >
-          Admin Panel
+      <ul
+        v-if="menuOpen"
+        class="md:hidden mt-2 rounded-xl border border-cyan-700/50 bg-[#0a0a1a]/95 backdrop-blur-xl shadow-2xl flex flex-col gap-3 px-6 py-4 text-gray-300 font-semibold text-lg"
+      >
+        <router-link to="/games" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">
+          <i class="fas fa-gamepad mr-2 text-cyan-400"></i> Games
         </router-link>
 
-        <a 
-          v-if="user && user.email === 'onlyadmin@gmail.com'" 
-          @click.stop="logout(); toggleMenu();" 
+        <button
+          @click="goToHowItWorks"
+          class="hover:text-cyan-400 transition py-1 flex items-center"
+        >
+          <i class="fas fa-info-circle mr-2 text-cyan-400"></i> How It Works
+        </button>
+
+        <router-link to="/about" @click="toggleMenu" class="hover:text-cyan-400 transition py-1">
+          <i class="fas fa-users mr-2 text-cyan-400"></i> About
+        </router-link>
+
+        <div class="border-t border-gray-700 my-2"></div>
+
+        <router-link
+          v-if="user && user.email === 'onlyadmin@gmail.com'"
+          to="/admin"
+          @click="toggleMenu"
+          class="text-red-400 hover:text-red-300 transition py-1"
+        >
+          <i class="fas fa-shield-alt mr-2"></i> Admin Panel
+        </router-link>
+
+        <a
+          v-if="user && user.email === 'onlyadmin@gmail.com'"
+          @click.stop="logout(); toggleMenu();"
           class="text-red-400 hover:text-red-300 transition cursor-pointer py-1"
         >
-          Logout
+          <i class="fas fa-sign-out-alt mr-2"></i> Logout
         </a>
-        
-        <router-link 
-          to="/cart" 
-          @click="toggleMenu" 
+
+        <router-link
+          to="/cart"
+          @click="toggleMenu"
           class="relative flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition py-1"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          Cart 
+          <i class="fas fa-shopping-cart"></i>
+          Cart
+          <span
+            v-if="cartCount > 0"
+            class="absolute -top-1 left-16 text-white text-xs font-bold px-1.5 py-0.5 rounded-full bg-red-600 shadow-md ring-2 ring-gray-900"
+          >
+            {{ cartCount }}
+          </span>
         </router-link>
       </ul>
     </transition>
@@ -104,6 +154,7 @@
 
 <script>
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { nextTick } from "vue";
 
 export default {
   name: "Navbar",
@@ -111,34 +162,22 @@ export default {
     return {
       menuOpen: false,
       user: null,
-      cartItems: []
+      cartItems: [],
     };
   },
   computed: {
     cartCount() {
-      // Ensure this matches the logic used in other components
       return this.cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
-    }
+    },
   },
   created() {
     const auth = getAuth();
-    // 1. Auth state listener
-    onAuthStateChanged(auth, (user) => {
-      this.user = user;
-    });
-
-    // 2. Close mobile menu on route change (Good fallback for navigation)
-    this.$router.afterEach(() => {
-      this.menuOpen = false;
-    });
-
-    // 3. Cart loading logic
+    onAuthStateChanged(auth, (user) => (this.user = user));
+    this.$router.afterEach(() => (this.menuOpen = false));
     this.loadCart();
-    // Add event listener to react to changes in local storage from other tabs/windows (like adding to cart)
     window.addEventListener("storage", this.loadCart);
   },
   beforeUnmount() {
-    // Clean up event listener
     window.removeEventListener("storage", this.loadCart);
   },
   methods: {
@@ -146,7 +185,6 @@ export default {
       this.menuOpen = !this.menuOpen;
     },
     loadCart() {
-      // Logic for loading guest cart from local storage
       this.cartItems = JSON.parse(localStorage.getItem("guestCart") || "[]");
     },
     logout() {
@@ -156,11 +194,31 @@ export default {
         this.$router.push("/");
       });
     },
+    async goToHowItWorks() {
+      this.menuOpen = false;
+
+      if (this.$route.path !== "/") {
+        await this.$router.push("/");
+        // Wait for the Home component to render fully
+        await new Promise((r) => setTimeout(r, 400));
+        await nextTick();
+      }
+
+      const section = document.getElementById("how-it-works");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        console.warn("⚠️ 'how-it-works' section not found in DOM");
+      }
+    },
   },
 };
 </script>
 
+
 <style scoped>
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css");
+
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }

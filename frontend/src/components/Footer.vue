@@ -1,51 +1,100 @@
 <template>
-  <footer class="bg-gray-950 text-gray-300 py-10 border-t-4 border-cyan-800">
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-      
-      <div class="space-y-4">
-        <h2 class="text-3xl font-black text-cyan-400 drop-shadow-md tracking-wider">
+  <footer
+    class="relative overflow-hidden bg-gradient-to-b from-[#03030a] via-[#050518] to-[#0b0b1f] text-gray-300 py-16 border-t border-cyan-800/40"
+  >
+    <!-- Animated grid / glow background -->
+    <div class="absolute inset-0 -z-10 opacity-30 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.15),_transparent_70%)] animate-pulse-slow"></div>
+    <div class="absolute inset-0 -z-20 bg-[url('https://www.transparenttextures.com/patterns/dark-mosaic.png')] opacity-10"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
+      <!-- BRAND -->
+      <div class="space-y-5">
+        <h2
+          class="text-3xl sm:text-4xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 drop-shadow-[0_0_12px_rgba(56,189,248,0.6)]"
+        >
           SankGaming
         </h2>
-        <p class="text-gray-400 text-sm">
-          Your portal to instant, lag-free gaming access. Rent the newest titles instantly.
+        <p class="text-gray-400 text-sm leading-relaxed">
+          Power up your play! Rent top titles, unlock gaming freedom, and dive into immersive worlds anytime.
         </p>
-        <!--<div class="flex gap-4 mt-6">
-          <a href="#" class="text-cyan-500 hover:text-cyan-400 transition transform hover:scale-110">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.4 3.7A5.9 5.9 0 0 1 12 2a5.9 5.9 0 0 1 4.6 1.7 6.1 6.1 0 0 1 1.2 3.8 6.1 6.1 0 0 1-1.2 3.8l-1.6 1.6-1.5 1.5-1.5 1.5-1.5 1.5-1.5 1.5-1.5-1.5-1.5-1.5-1.5-1.5-1.5-1.5-1.6-1.6A6.1 6.1 0 0 1 5.8 7.5a6.1 6.1 0 0 1 1.2-3.8ZM12 4.1c-1.3 0-2.5.5-3.4 1.4-1 .9-1.5 2.1-1.5 3.4 0 1.3.5 2.5 1.4 3.4L12 15.9l3.1-3c.9-.9 1.4-2.1 1.4-3.4 0-1.3-.5-2.5-1.4-3.4-.9-.9-2.1-1.4-3.4-1.4Z" clip-rule="evenodd"/>
-            </svg>
+        <div class="flex gap-4 mt-4">
+          <!--<a
+            href="#"
+            class="p-2 rounded-full bg-gray-800/70 hover:bg-cyan-600/40 transition transform hover:scale-110 hover:shadow-[0_0_18px_rgba(56,189,248,0.7)]"
+          >
+            <i class="fab fa-twitter text-cyan-400 text-lg"></i>
           </a>
-          <a href="#" class="text-cyan-500 hover:text-cyan-400 transition transform hover:scale-110">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22.675 3.03H1.325A1.325 1.325 0 0 0 0 4.355v15.29A1.325 1.325 0 0 0 1.325 21H22.675A1.325 1.325 0 0 0 24 19.645V4.355A1.325 1.325 0 0 0 22.675 3.03Z" clip-rule="evenodd"/>
-            </svg>
+          <a
+            href="#"
+            class="p-2 rounded-full bg-gray-800/70 hover:bg-purple-600/40 transition transform hover:scale-110 hover:shadow-[0_0_18px_rgba(168,85,247,0.7)]"
+          >
+            <i class="fab fa-discord text-purple-400 text-lg"></i>
           </a>
-          <a href="#" class="text-cyan-500 hover:text-cyan-400 transition transform hover:scale-110">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-3.75 14.5a.75.75 0 0 1 0-1.5h7.5a.75.75 0 0 1 0 1.5h-7.5ZM9 12.75a.75.75 0 0 1 0-1.5h7.5a.75.75 0 0 1 0 1.5H9Zm.75-3.75a.75.75 0 0 1 0-1.5h5.5a.75.75 0 0 1 0 1.5h-5.5Z" clip-rule="evenodd"/>
-            </svg>
-          </a>
-        </div> -->
+          <a
+            href="#"
+            class="p-2 rounded-full bg-gray-800/70 hover:bg-red-600/40 transition transform hover:scale-110 hover:shadow-[0_0_18px_rgba(239,68,68,0.7)]"
+          >
+            <i class="fab fa-youtube text-red-500 text-lg"></i>
+          </a> -->
+        </div>
       </div>
 
-      
+      <!-- QUICK LINKS -->
+      <div>
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3 border-l-2 border-cyan-600 pl-3">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li><router-link to="/games" class="hover:text-cyan-300 transition">Browse Games</router-link></li>
+          <li><a href="#how-it-works" class="hover:text-cyan-300 transition">How It Works</a></li>
+          <li><router-link to="/about" class="hover:text-cyan-300 transition">About Us</router-link></li>
+        </ul>
+      </div>
 
-      
+      <!-- SUPPORT -->
+      <!---<div>
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3 border-l-2 border-cyan-600 pl-3">Support</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-cyan-300 transition">FAQs</a></li>
+          <li><a href="#" class="hover:text-cyan-300 transition">Terms of Service</a></li>
+          <li><a href="#" class="hover:text-cyan-300 transition">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-cyan-300 transition">Report a Problem</a></li>
+        </ul>
+      </div> -->
 
-      
+      <!-- NEWSLETTER -->
+      <div>
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3 border-l-2 border-cyan-600 pl-3">Stay Updated</h3>
+        <p class="text-gray-400 text-sm mb-4">
+          Subscribe for exclusive game drops, special rental discounts, and sneak peeks.
+        </p>
+        <form @submit.prevent class="flex items-center gap-2">
+          <input
+            type="email"
+            placeholder="Your Email"
+            class="w-full px-3 py-2 rounded-lg bg-gray-900/70 border border-cyan-700/40 focus:ring-2 focus:ring-cyan-500 outline-none text-gray-200 text-sm placeholder-gray-500"
+          />
+          <button
+            type="submit"
+            class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-semibold text-sm text-white hover:shadow-[0_0_20px_rgba(56,189,248,0.6)] hover:scale-[1.03] transition-all"
+          >
+            Join
+          </button>
+        </form>
+      </div>
     </div>
 
-    <div class="border-t border-[#334155] mt-8 pt-4 text-center text-[#c1cee0] text-sm text-bold">
-      © {{ new Date().getFullYear() }}<a 
-    href="https://aqil-lab.vercel.app" 
-    target="_blank" 
-    rel="noopener noreferrer"
-    class="text-cyan-500 hover:text-cyan-300 transition-colors font-semibold"
-  >
-    AqilLabs.
-  </a> All rights reserved.
+    <!-- COPYRIGHT -->
+    <div class="relative border-t border-cyan-800/30 mt-12 pt-6 text-center text-gray-500 text-sm z-10">
+      © {{ new Date().getFullYear() }}
+      <a
+        href="https://aqil-lab.vercel.app"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-cyan-400 hover:text-cyan-300 transition font-semibold"
+      >
+        AqilLabs
+      </a>
+      — All Rights Reserved.
     </div>
-    
   </footer>
 </template>
 
@@ -56,5 +105,14 @@ export default {
 </script>
 
 <style scoped>
-/* Scoped styles are not strictly necessary as all styling is handled by Tailwind classes */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css");
+
+/* Slow pulsating background glow */
+@keyframes pulseGlowSlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+.animate-pulse-slow {
+  animation: pulseGlowSlow 10s ease-in-out infinite;
+}
 </style>
